@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>
+    {{isConfirm ? 'Ending the test...' : (isRedirecting ? 'Redirecting...' : ('Hi '+data.name))}}
+</h1>
+<div mat-dialog-content *ngIf="!isRedirecting">
+  <ng-container *ngIf="isConfirm; then countdown else ask"></ng-container>
+</div>
+<div mat-dialog-actions *ngIf="!isConfirm && !isRedirecting" class="text-center">
+  <button mat-button (click)="onClose()">No</button>
+  <button mat-button (click)="confirmLeave()">Yes</button>
+</div>
+
+
+<ng-template #ask>
+    <p>Are you sure that you want to leave the test?</p>
+</ng-template>
+
+<ng-template #countdown>
+    <p>You will be redirected to main page in {{countdownVal}} seconds.</p>
+</ng-template>

@@ -1,0 +1,7 @@
+.upAndDownButtons {
+    visibility: hidden;
+}
+
+.dragging-box:hover .upAndDownButtons {
+    visibility: visible;
+}

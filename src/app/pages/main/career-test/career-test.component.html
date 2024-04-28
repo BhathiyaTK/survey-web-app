@@ -1,0 +1,484 @@
+<section class="container mx-auto py-8">
+  <div class="flex flex-row items-center justify-between space-x-8">
+    <h1 class="text-4xl font-bold">Career Test</h1>
+    <button (click)="openDialog()"
+     class="flex flex-row items-center space-x-1.5 text-blue-500 border border-blue-500 rounded-md px-4 py-2 hover:bg-blue-500 hover:text-white transition"
+      title="Exit test">
+      <mat-icon aria-hidden="false" aria-label="back to welcome page" fontIcon="cancel"></mat-icon>
+      <span>Exit</span>
+    </button>
+  </div>
+
+  <!-- Career steps -->
+  <div class="mt-10">
+    <mat-stepper [linear]="false" labelPosition="bottom" #stepper> <!-- orientation="vertical" -->
+      <mat-step>
+        <ng-template matStepLabel>
+          <div class="font-medium">Section 1</div>
+          <div class="text-xs">Acedamic Grades</div>
+        </ng-template>
+        <div class="border rounded-md p-5 mb-5 bg-gray-50">
+          <div class="subheading mb-8">
+            <h1 class="text-2xl font-medium mb-1">Acedamic Grades</h1>
+            <p class="text-sm">
+              This section should be completed by referring to your academic performace as an undergraduate.
+            </p>
+          </div>
+          <div>
+            <!-- step 1 form starts -->
+            <form>
+              <ol class="ml-4">
+                <li>
+                  <div>
+                    <p class="mb-4">Cumulative Grade Point Average (CGPA) value:</p>
+                    <input type="text" name="" id="" placeholder="Please enter a number less than or equal to 4.2"
+                      class="test-form-field">
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <p class="mb-4">Specify the <span class="font-semibold">grades</span> received for the following
+                      undergraduate course modules.</p>
+                    <div class="border rounded-md bg-white">
+                      <div class="grid grid-cols-8 w-full text-center font-medium py-3 border-b">
+                        <div class="col-span-2"></div>
+                        <div>A+/A</div>
+                        <div>A-</div>
+                        <div>B+</div>
+                        <div>B</div>
+                        <div>B-</div>
+                        <div>C+/C/C-/D</div>
+                      </div>
+                      <ng-container *ngFor="let item of displayedRowsStep1">
+                        <div class="grid grid-cols-8 w-full text-center py-2.5 border-b">
+                          <div class="col-span-2 text-left pl-5 flex flex-wrap items-center">{{item.subject}}</div>
+                          <div class="col-span-6">
+                            <mat-radio-group>
+                              <div class="flex flex-row items-center justify-around">
+                                <ng-container *ngFor="let option of radioOptionCounter(item.radioOptCount); let i = index">
+                                  <mat-radio-button [value]="(i === 0) ? 'A+/A' : ((i === 1) ? 'A-' : ((i === 2) ? 'B+' : ((i === 3) ? 'B' : ((i === 4) ? 'B-' : 'C+/C/C-/D'))))"></mat-radio-button>
+                                </ng-container>
+                              </div>
+                            </mat-radio-group>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </li>
+              </ol>
+            </form>
+            <!-- step 1 form ends -->
+          </div>
+        </div>
+        <div>
+          <button matStepperNext class="btn primary-btn px-7 py-2">Next</button>
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>
+          <div class="font-medium">Section 2</div>
+          <div class="text-xs">Project Experience</div>
+        </ng-template>
+        <div class="border rounded-md p-5 mb-5 bg-gray-50">
+          <div class="subheading mb-8">
+            <h1 class="text-2xl font-medium mb-1">Projects Experience</h1>
+            <p class="text-sm">
+              This section should be completed by referring to your project experience as an undergraduate.
+            </p>
+          </div>
+          <div>
+            <!-- step 2 form starts -->
+            <form>
+              <ol class="ml-4">
+                <li>
+                  <div>
+                    <p class="mb-4">Specify the <span class="font-semibold">level of engagement</span> in the following tasks or responsibilities within academic projects (individual/group).</p>
+                    <div class="border rounded-md bg-white">
+                      <div class="grid grid-cols-7 w-full text-center font-medium py-3 border-b">
+                        <div class="col-span-2"></div>
+                        <div>Never</div>
+                        <div>Rarely</div>
+                        <div>Sometimes</div>
+                        <div>Frequently</div>
+                        <div>Very Frequently</div>
+                      </div>
+                      <ng-container *ngFor="let item of displayedRowsStep2">
+                        <div class="grid grid-cols-7 w-full text-center py-2.5 border-b">
+                          <div class="col-span-2 text-left pl-5 flex flex-wrap items-center">{{item.task}}</div>
+                          <div class="col-span-5">
+                            <mat-radio-group>
+                              <div class="flex flex-row items-center justify-around">
+                                <ng-container *ngFor="let option of radioOptionCounter(item.radioOptCount); let i = index">
+                                  <mat-radio-button [value]="(i === 0) ? 'Never' : ((i === 1) ? 'Rarely' : ((i === 2 ? 'Sometimes' : ((i === 3) ? 'Frequently' : 'Very Frequently'))))"></mat-radio-button>
+                                </ng-container>
+                              </div>
+                            </mat-radio-group>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <p class="mb-4">If you have undertaken any <span class="font-semibold">open-source projects</span> during the undergraduate period, rate your experience on a scale of 1-5.</p>
+                    <div class="border rounded-md bg-white w-fit">
+                      <mat-radio-group aria-label="Select an option">
+                        <div class="flex flex-row">
+                          <ng-container *ngFor="let item of radioOptionCounter(5); let i = index;">
+                            <div class="border-r last:border-none px-5 py-2">
+                              <mat-radio-button [value]="i+1">{{i+1}}</mat-radio-button>
+                            </div>
+                          </ng-container>
+                        </div>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <p class="mb-4">If you have completed an <span class="font-semibold">undergraduate dissertation (research project)</span>, rate your performance on a scale of 1-5.</p>
+                    <div class="border rounded-md bg-white w-fit">
+                      <mat-radio-group aria-label="Select an option">
+                        <div class="flex flex-row">
+                          <ng-container *ngFor="let item of radioOptionCounter(5); let i = index;">
+                            <div class="border-r last:border-none px-5 py-2">
+                              <mat-radio-button [value]="i+1">{{i+1}}</mat-radio-button>
+                            </div>
+                          </ng-container>
+                        </div>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+                </li>
+              </ol>
+            </form>
+            <!-- step 2 form ends -->
+          </div>
+        </div>
+        <div>
+          <button matStepperPrevious class="btn secondary-btn px-7 py-2 mr-4">Back</button>
+          <button matStepperNext class="btn primary-btn px-7 py-2">Next</button>
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>
+          <div class="font-medium">Section 3</div>
+          <div class="text-xs">Internship Experience</div>
+        </ng-template>
+        <div class="border rounded-md p-5 mb-5 bg-gray-50">
+          <div class="subheading mb-8">
+            <h1 class="text-2xl font-medium mb-1">Projects Experience</h1>
+            <p class="text-sm">
+              This section should be completed by referring to your internship experience as an undergraduate.
+            </p>
+          </div>
+          <div>
+            <!-- step 3 form starts -->
+            <form>
+              <ol class="ml-4">
+                <li>
+                  <div>
+                    <p class="mb-4">If you have completed an <span class="font-semibold">industrial training</span> during the undergraduate period, rate your performance on a scale of 1-5.</p>
+                    <div class="border rounded-md bg-white w-fit">
+                      <mat-radio-group aria-label="Select an option">
+                        <div class="flex flex-row">
+                          <ng-container *ngFor="let item of radioOptionCounter(5); let i = index;">
+                            <div class="border-r last:border-none px-5 py-2">
+                              <mat-radio-button [value]="i+1">{{i+1}}</mat-radio-button>
+                            </div>
+                          </ng-container>
+                        </div>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <p class="mb-4">Specify the <span class="font-semibold">level of engagement</span> in the following tasks or responsibilities during industrial training.</p>
+                    <div class="border rounded-md bg-white">
+                      <div class="grid grid-cols-7 w-full text-center font-medium py-3 border-b">
+                        <div class="col-span-2"></div>
+                        <div>Never</div>
+                        <div>Rarely</div>
+                        <div>Sometimes</div>
+                        <div>Frequently</div>
+                        <div>Very Frequently</div>
+                      </div>
+                      <ng-container *ngFor="let item of displayedRowsStep3">
+                        <div class="grid grid-cols-7 w-full text-center py-2.5 border-b">
+                          <div class="col-span-2 text-left pl-5 flex flex-wrap items-center">{{item.task}}</div>
+                          <div class="col-span-5">
+                            <mat-radio-group>
+                              <div class="flex flex-row items-center justify-around">
+                                <ng-container *ngFor="let option of radioOptionCounter(item.radioOptCount); let i = index">
+                                  <mat-radio-button [value]="(i === 0) ? 'Never' : ((i === 1) ? 'Rarely' : ((i === 2 ? 'Sometimes' : ((i === 3) ? 'Frequently' : 'Very Frequently'))))"></mat-radio-button>
+                                </ng-container>
+                              </div>
+                            </mat-radio-group>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </li>
+              </ol>
+            </form>
+            <!-- step 3 form ends -->
+          </div>
+        </div>
+        <div>
+          <button matStepperPrevious class="btn secondary-btn px-7 py-2 mr-4">Back</button>
+          <button matStepperNext class="btn primary-btn px-7 py-2">Next</button>
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>
+          <div class="font-medium">Section 4</div>
+          <div class="text-xs">Skills and Competencies</div>
+        </ng-template>
+        <div class="border rounded-md p-5 mb-5 bg-gray-50">
+          <div class="subheading mb-8">
+            <h1 class="text-2xl font-medium mb-1">Skills and Competencies</h1>
+            <p class="text-sm">
+              This section should be completed by referring to the skill/competency levels you process as an undergraduate.
+            </p>
+          </div>
+          <div>
+            <!-- step 4 form starts -->
+            <form>
+              <ol class="ml-4">
+                <li>
+                  <div>
+                    <p class="mb-4"><span class="font-semibold">On a scale of 1-5, rate</span> yourself on each of the following technical skills as an undergraduate.</p>
+                    <div class="border rounded-md bg-white">
+                      <div class="grid grid-cols-7 w-full text-center font-medium py-3 border-b">
+                        <div class="col-span-2"></div>
+                        <div>1</div>
+                        <div>2</div>
+                        <div>3</div>
+                        <div>4</div>
+                        <div>5</div>
+                      </div>
+                      <ng-container *ngFor="let item of displayedRowsStep4_1">
+                        <div class="grid grid-cols-7 w-full text-center py-2.5 border-b">
+                          <div class="col-span-2 text-left pl-5 flex flex-wrap items-center">{{item.task}}</div>
+                          <div class="col-span-5">
+                            <mat-radio-group>
+                              <div class="flex flex-row items-center justify-around">
+                                <ng-container *ngFor="let option of radioOptionCounter(item.radioOptCount); let i = index">
+                                  <mat-radio-button [value]="(i === 0) ? '1' : ((i === 1) ? '2' : ((i === 2 ? '3' : ((i === 3) ? '4' : '5'))))"></mat-radio-button>
+                                </ng-container>
+                              </div>
+                            </mat-radio-group>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <p class="mb-4"><span class="font-semibold">On a scale of 1-5, rate</span> yourself on each of the following soft skills as an undergraduate.</p>
+                    <div class="border rounded-md bg-white">
+                      <div class="grid grid-cols-7 w-full text-center font-medium py-3 border-b">
+                        <div class="col-span-2"></div>
+                        <div>1</div>
+                        <div>2</div>
+                        <div>3</div>
+                        <div>4</div>
+                        <div>5</div>
+                      </div>
+                      <ng-container *ngFor="let item of displayedRowsStep4_2">
+                        <div class="grid grid-cols-7 w-full text-center py-2.5 border-b">
+                          <div class="col-span-2 text-left pl-5 flex flex-wrap items-center">{{item.task}}</div>
+                          <div class="col-span-5">
+                            <mat-radio-group>
+                              <div class="flex flex-row items-center justify-around">
+                                <ng-container *ngFor="let option of radioOptionCounter(item.radioOptCount); let i = index">
+                                  <mat-radio-button [value]="(i === 0) ? '1' : ((i === 1) ? '2' : ((i === 2 ? '3' : ((i === 3) ? '4' : '5'))))"></mat-radio-button>
+                                </ng-container>
+                              </div>
+                            </mat-radio-group>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </li>
+              </ol>
+            </form>
+            <!-- step 4 form ends -->
+          </div>
+        </div>
+        <div>
+          <button matStepperPrevious class="btn secondary-btn px-7 py-2 mr-4">Back</button>
+          <button matStepperNext class="btn primary-btn px-7 py-2">Next</button>
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>
+          <div class="font-medium">Section 5</div>
+          <div class="text-xs">Extra-curricular Activities</div>
+        </ng-template>
+        <div class="border rounded-md p-5 mb-5 bg-gray-50">
+          <div class="subheading mb-8">
+            <h1 class="text-2xl font-medium mb-1">Extra-curricular Activities</h1>
+            <p class="text-sm">
+              This section should be completed referring to the extra-curricular achievements as an undergraduate.
+            </p>
+          </div>
+          <div>
+            <!-- step 5 form starts -->
+            <form>
+              <ol class="ml-4">
+                <li>
+                  <div>
+                    <p class="mb-4">Specify the <span class="font-semibold">level of participation/engagement</span> in the following extra-curricular activities as an undergraduate.</p>
+                    <div class="border rounded-md bg-white">
+                      <div class="grid grid-cols-7 w-full text-center font-medium py-3 border-b">
+                        <div class="col-span-2"></div>
+                        <div>Never</div>
+                        <div>Rarely</div>
+                        <div>Sometimes</div>
+                        <div>Frequently</div>
+                        <div>Very Frequently</div>
+                      </div>
+                      <ng-container *ngFor="let item of displayedRowsStep5">
+                        <div class="grid grid-cols-7 w-full text-center py-2.5 border-b">
+                          <div class="col-span-2 text-left pl-5 flex flex-wrap items-center">{{item.activity}}</div>
+                          <div class="col-span-5">
+                            <mat-radio-group>
+                              <div class="flex flex-row items-center justify-around">
+                                <ng-container *ngFor="let option of radioOptionCounter(item.radioOptCount); let i = index">
+                                  <mat-radio-button [value]="(i === 0) ? 'Never' : ((i === 1) ? 'Rarely' : ((i === 2 ? 'Sometimes' : ((i === 3) ? 'Frequently' : 'Very Frequently'))))"></mat-radio-button>
+                                </ng-container>
+                              </div>
+                            </mat-radio-group>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </li>
+              </ol>
+            </form>
+            <!-- step 5 form ends -->
+          </div>
+        </div>
+        <div>
+          <button matStepperPrevious class="btn secondary-btn px-7 py-2 mr-4">Back</button>
+          <button matStepperNext class="btn primary-btn px-7 py-2">Next</button>
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>
+          <div class="font-medium">Section 6</div>
+          <div class="text-xs">Professional Qualifications</div>
+        </ng-template>
+        <div class="border rounded-md p-5 mb-5 bg-gray-50">
+          <div class="subheading mb-8">
+            <h1 class="text-2xl font-medium mb-1">Professional Qualifications</h1>
+            <p class="text-sm">
+              This section should be completed considering the professional qualification achievements as an undergraduate.
+            </p>
+          </div>
+          <div>
+            <!-- step 6 form starts -->
+            <form>
+              <ol class="ml-4">
+                <li>
+                  <div>
+                    <p class="mb-4">Specify if you have completed any globally recognized professional certifications (at least entry-level) during the undergraduate period.</p>
+                    <div class="border rounded-md bg-white">
+                      <div *ngFor="let gc of globalCertificates">
+                        <mat-checkbox (change)="onChange($event, 0)" [value]="gc.value">{{gc.title}}</mat-checkbox>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <p class="mb-4">Specify if you have completed any certificate or diploma courses (in-person/online) at recognised institutes or MOOCs (Coursera, Udemy etc.) during the undergraduate period.</p>
+                    <div class="border rounded-md bg-white">
+                      <div *ngFor="let dc of diplomaCourses">
+                        <mat-checkbox (change)="onChange($event, 1)" [value]="dc.value">{{dc.title}}</mat-checkbox>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ol>
+            </form>
+            <!-- step 6 form ends -->
+          </div>
+        </div>
+        <div>
+          <button matStepperPrevious class="btn secondary-btn px-7 py-2 mr-4">Back</button>
+          <button matStepperNext class="btn primary-btn px-7 py-2">Next</button>
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>
+          <div class="font-medium">Section 7</div>
+          <div class="text-xs">Personal Preferences</div>
+        </ng-template>
+        <div class="border rounded-md p-5 mb-5 bg-gray-50">
+          <div class="subheading mb-8">
+            <h1 class="text-2xl font-medium mb-1">Personal Preferences</h1>
+            <p class="text-sm">
+              This section should be completed by referring your career preference as an undergraduate.
+            </p>
+          </div>
+          <div>
+            <!-- step 7 form starts -->
+            <form>
+              <ol class="ml-4">
+                <li>
+                  <div>
+                    <p class="mb-4">
+                      Rank the following career paths referring to your career preference as an undergraduate. Let the most preferred career path is placed on the top.
+                      <br><small>(Drag and drop items up and down to reorder the list)</small>
+                    </p>
+                    <div class="border rounded-md bg-white">
+                      <div cdkDropList (cdkDropListDropped)="drop($event)" class="dragging-list">
+                        <div class="p-3 border-b last:border-b-0 cursor-move bg-white first:rounded-t-md last:rounded-b-md 
+                                    hover:bg-blue-100 dragging-box flex flex-row justify-between align-center" 
+                            *ngFor="let careerPref of careerPrefList; let i = index" 
+                            cdkDrag cdkDragLockAxis="y" (cdkDragMoved)="dragging($event)">
+                            <div>{{i+1 + '.&nbsp;&nbsp;&nbsp;' + careerPref}}</div>
+                            <div class="flex flex-row align-center space-x-4 upAndDownButtons">
+                              <button type="button" [title]="i === 0 ? '' : 'Move up'" aria-label="Move up" (click)="moveUp(i)" [disabled]="i === 0"
+                                class="flex justify-center align-center border rounded-full bg-white" [ngClass]="(i === 0) ? 'text-gray-300 border-gray-300' : 'border-gray-400'">
+                                <mat-icon aria-hidden="false" fontIcon="expand_less"></mat-icon>
+                              </button>
+                              <button type="button" [title]="i === careerPrefList.length-1 ? '' : 'Move down'" aria-label="Move down" (click)="moveDown(i)" [disabled]="i === careerPrefList.length-1"
+                                class="flex justify-center align-center border rounded-full bg-white" [ngClass]="(i === careerPrefList.length-1) ? 'text-gray-300 border-gray-300' : 'border-gray-400'">
+                                <mat-icon aria-hidden="false" fontIcon="expand_more"></mat-icon>
+                              </button>
+                            </div>
+                        </div>
+                      </div>                      
+                    </div>
+                  </div>
+                </li>
+              </ol>
+            </form>
+            <!-- step 7 form ends -->
+          </div>
+        </div>
+        <div>
+          <div class="flex flex-row align-center">
+            <div class="border-r pr-5">
+              <button matStepperPrevious class="btn secondary-btn px-7 py-2 mr-4">Back</button>
+              <button class="btn success-btn px-7 py-2">Submit</button>
+            </div>
+            <div class="pl-5">
+              <button (click)="stepper.reset()" class="btn danger-outline-btn px-5 py-2">Reset</button>
+            </div>
+          </div>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </div>
+</section>

@@ -1,0 +1,43 @@
+<section class="flex flex-row w-full">
+    <div class="relative w-[45%] h-screen flex justify-center items-center bg-white">
+        <div class="w-full md:w-[55%]">
+            <div class="mb-10">
+                <h5 class="mb-1 font-medium">Welcome back!</h5>
+                <h1 class="text-4xl font-bold">Sign in to your Account</h1>
+            </div>
+            <form>
+                <mat-form-field class="w-full">
+                    <mat-label>Email</mat-label>
+                    <input type="email" matInput placeholder="Ex. name@example.com">
+                </mat-form-field>
+                <mat-form-field class="w-full">
+                    <mat-label>Password</mat-label>
+                    <input type="password" matInput>
+                </mat-form-field>
+                <!-- <div class="mb-3">
+                    <label for="userEmail">Email</label><br>
+                    <input type="email" name="userEmail" id="userEmail" required>
+                </div>
+                <div class="mb-7">
+                    <label for="userPassword">Password</label><br>
+                    <input type="password" name="userPassword" id="userPassword" required>
+                </div> -->
+                <div class="flex flex-row justify-between items-center mb-5">
+                    <div class="-ml-[10px]">
+                        <mat-checkbox>Remember Me!</mat-checkbox>
+                    </div>
+                    <div>
+                        <a routerLink="">Forgot Password?</a>
+                    </div>
+                </div>
+                <button class="btn primary-btn w-full px-3 py-4">Sign In</button>
+            </form>
+            <div class="absolute bottom-16 left-1/2 -translate-x-1/2">
+                Don't have an account? <a routerLink="./sign-up">Sign up</a>
+            </div>
+        </div>
+    </div>
+    <div class="w-[55%] h-screen bg-blue-500">
+
+    </div>
+</section>

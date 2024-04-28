@@ -1,1 +1,139 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$survey-app-primary: mat.define-palette(mat.$blue-palette, 600);
+$survey-app-accent: mat.define-palette(mat.$blue-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$survey-app-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$survey-app-theme: mat.define-light-theme((color: (primary: $survey-app-primary,
+                accent: $survey-app-accent,
+                warn: $survey-app-warn,
+            )));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($survey-app-theme);
+
 /* You can add global styles to this file, and also import other style files */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+ol {
+    list-style: decimal;
+}
+
+ol > li {
+    margin-bottom: 30px;
+}
+
+input {
+    width: 100%;
+    border: 1px solid rgb(209, 209, 209);
+    border-radius: 5px;
+    padding: 10px;
+}
+
+input.test-form-field {
+    width: 100%;
+    border: 1px solid rgb(209, 209, 209);
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+a {
+    @apply font-medium;
+    @apply text-blue-500;
+    @apply hover:text-blue-600;
+}
+
+.btn {
+    @apply rounded-md;
+    @apply text-white;
+    @apply hover:text-white;
+    @apply font-medium;
+    @apply transition;
+    @apply duration-300;
+}
+
+.primary-btn {
+    @apply bg-blue-500;
+    @apply hover:bg-blue-600;
+}
+.danger-btn {
+    @apply bg-red-500;
+    @apply hover:bg-red-600;
+}
+.secondary-btn {
+    @apply text-black;
+    @apply bg-gray-200;
+    @apply hover:bg-gray-300;
+    @apply hover:text-black;
+}
+.success-btn {
+    @apply bg-green-600;
+    @apply hover:bg-green-700;
+}
+.danger-outline-btn {
+    @apply border;
+    @apply border-red-200;
+    @apply text-red-600;
+    @apply hover:bg-red-100;
+    @apply hover:text-red-600;
+}
+
+// Material Custom Styles
+
+.mat-horizontal-content-container {
+    padding: 0 0 24px !important;
+}
+
+.cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+                0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  }
+  
+  .cdk-drag-placeholder {
+    opacity: 0;
+  }
+  
+  .cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+  
+  .dragging-box:last-child {
+    border: none;
+  }
+  
+  .dragging-list.cdk-drop-list-dragging .dragging-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
