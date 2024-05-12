@@ -22,15 +22,21 @@
                     <mat-label>Email</mat-label>
                     <input type="email" matInput placeholder="Ex. name@example.com">
                 </mat-form-field>
-                <mat-form-field class="w-full">
+                <mat-form-field class="w-full relative">
                     <mat-label>Password</mat-label>
-                    <input type="password" matInput>
+                    <input [type]="showPassword ? 'text' : 'password'" matInput>
+                    <mat-icon aria-hidden="false" (click)="togglePasswordVisibility()" 
+                        [fontIcon]="showPassword ? 'visibility_off' : 'visibility'" 
+                        class="absolute right-0 top-1/2 -translate-y-1/2 text-blue-500"></mat-icon>
                 </mat-form-field>
-                <mat-form-field class="w-full">
+                <mat-form-field class="w-full relative">
                     <mat-label>Confirm Password</mat-label>
-                    <input type="password" matInput>
+                    <input [type]="showConfPassword ? 'text' : 'password'" matInput>
+                    <mat-icon aria-hidden="false" (click)="toggleConfPasswordVisibility()" 
+                        [fontIcon]="showConfPassword ? 'visibility_off' : 'visibility'" 
+                        class="absolute right-0 top-1/2 -translate-y-1/2 text-blue-500"></mat-icon>
                 </mat-form-field>
-                <button class="btn primary-btn w-full px-3 py-4 mt-5">Sign Up</button>
+                <button class="btn primary-btn w-full px-3 py-4 mt-5 uppercase tracking-wider">Sign Up</button>
             </form>
             <div class="absolute bottom-16 left-1/2 -translate-x-1/2">
                 Already have an account? <a routerLink="/sign-in">Sign in</a>

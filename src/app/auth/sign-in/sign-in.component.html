@@ -10,9 +10,12 @@
                     <mat-label>Email</mat-label>
                     <input type="email" matInput placeholder="Ex. name@example.com">
                 </mat-form-field>
-                <mat-form-field class="w-full">
+                <mat-form-field class="w-full relative">
                     <mat-label>Password</mat-label>
-                    <input type="password" matInput>
+                    <input [type]="showPassword ? 'text' : 'password'" matInput>
+                    <mat-icon aria-hidden="false" (click)="togglePasswordVisibility()" 
+                        [fontIcon]="showPassword ? 'visibility_off' : 'visibility'" 
+                        class="absolute right-0 top-1/2 -translate-y-1/2 text-blue-500"></mat-icon>
                 </mat-form-field>
                 <!-- <div class="mb-3">
                     <label for="userEmail">Email</label><br>
@@ -30,7 +33,7 @@
                         <a routerLink="">Forgot Password?</a>
                     </div>
                 </div>
-                <button class="btn primary-btn w-full px-3 py-4">Sign In</button>
+                <button class="btn primary-btn w-full px-3 py-4 uppercase tracking-wider">Sign In</button>
             </form>
             <div class="absolute bottom-16 left-1/2 -translate-x-1/2">
                 Don't have an account? <a routerLink="./sign-up">Sign up</a>
