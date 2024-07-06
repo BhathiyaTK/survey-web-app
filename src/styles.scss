@@ -42,14 +42,14 @@ body {
 
 body {
     margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-family: "inter-regular", sans-serif;
 }
 
 ol {
     list-style: decimal;
 }
 
-ol > li {
+ol>li {
     margin-bottom: 30px;
 }
 
@@ -86,20 +86,24 @@ a {
     @apply bg-blue-500;
     @apply hover:bg-blue-600;
 }
+
 .danger-btn {
     @apply bg-red-500;
     @apply hover:bg-red-600;
 }
+
 .secondary-btn {
     @apply text-black;
     @apply bg-gray-200;
     @apply hover:bg-gray-300;
     @apply hover:text-black;
 }
+
 .success-btn {
     @apply bg-green-600;
     @apply hover:bg-green-700;
 }
+
 .danger-outline-btn {
     @apply border;
     @apply border-red-200;
@@ -118,22 +122,60 @@ a {
     box-sizing: border-box;
     border-radius: 4px;
     box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-                0 8px 10px 1px rgba(0, 0, 0, 0.14),
-                0 3px 14px 2px rgba(0, 0, 0, 0.12);
-  }
-  
-  .cdk-drag-placeholder {
+        0 8px 10px 1px rgba(0, 0, 0, 0.14),
+        0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
     opacity: 0;
-  }
-  
-  .cdk-drag-animating {
+}
+
+.cdk-drag-animating {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-  }
-  
-  .dragging-box:last-child {
+}
+
+.dragging-box:last-child {
     border: none;
-  }
-  
-  .dragging-list.cdk-drop-list-dragging .dragging-box:not(.cdk-drag-placeholder) {
+}
+
+.dragging-list.cdk-drop-list-dragging .dragging-box:not(.cdk-drag-placeholder) {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-  }
+}
+
+.mat-spinner circle {
+    stroke: #e2e2e2 !important;
+}
+
+.mat-spinner-color::ng-deep circle {
+    stroke: #b9b9b9 !important;
+}
+
+// "Inter" font families
+
+.inter-black {
+    font-family: 'inter-black', sans-serif;
+}
+.inter-extrabold {
+    font-family: 'inter-extrabold', sans-serif;
+}
+.inter-bold {
+    font-family: 'inter-bold', sans-serif;
+}
+.inter-semibold {
+    font-family: 'inter-semibold', sans-serif;
+}
+.inter-medium {
+    font-family: 'inter-medium', sans-serif;
+}
+.inter-regular {
+    font-family: 'inter-regular', sans-serif;
+}
+.inter-thin {
+    font-family: 'inter-thin', sans-serif;
+}
+.inter-light {
+    font-family: 'inter-light', sans-serif;
+}
+.inter-extralight {
+    font-family: 'inter-extralight', sans-serif;
+}

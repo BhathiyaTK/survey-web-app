@@ -5,13 +5,11 @@ import { SignUpComponent } from './auth/sign-up/sign-up.component';
 import { MainComponent } from './pages/main/main.component';
 import { CareerTestComponent } from './pages/main/career-test/career-test.component';
 import { WelcomeComponent } from './pages/main/welcome/welcome.component';
+import { LandingComponent } from './pages/landing/landing.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: SignInComponent,
-    children: [{ path: 'sign-in', redirectTo: '', pathMatch: 'full' }],
-  },
+  { path: '', component: LandingComponent },
+  { path: 'sign-in', component: SignInComponent },
   { path: 'sign-up', component: SignUpComponent },
   {
     path: 'main',

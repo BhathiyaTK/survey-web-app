@@ -1,14 +1,26 @@
 <section class="border-b shadow-md">
-    <div class="container mx-auto flex flex-row justify-between items-center py-5">
+    <div class="container mx-auto flex flex-row justify-between items-center py-3">
         <div>
-            <img src="https://placehold.co/150x50/3b82f6/FFF?font=roboto&text=Logo" alt="logo">
+            <img src="./../../../assets/images/logos/TechXplore-Logo.png" width="250px" alt="logo">
         </div>
-        <div class="flex flex-row items-center justify-end space-x-10">
-            <a routerLink="">Link 1</a>
-            <a routerLink="">Link 2</a>
-            <a routerLink="">Link 3</a>
-            <a routerLink="">Link 4</a>
-            <a routerLink="" class="btn danger-btn px-6 py-1.5">Sign out</a>
+        <div class="flex flex-row items-center space-x-4 cursor-pointer hover:bg-slate-100 ps-3 pe-2 py-2 rounded-md" [matMenuTriggerFor]="menu">
+            <img class="rounded-full" src="assets/images/sample-profile.jpg" width="50" height="50" alt="Profile image">
+            <span class="font-medium">John Doe</span>
+            <mat-icon aria-hidden="false" fontIcon="arrow_drop_down"></mat-icon>
         </div>
     </div>
+
+    <mat-menu #menu="matMenu" xPosition="before" class="w-44">
+        <button mat-menu-item>
+            <mat-icon aria-hidden="false" aria-label="View profile" fontIcon="person"></mat-icon>Profile
+        </button>
+        <button mat-menu-item>
+            <mat-icon aria-hidden="false" aria-label="View previous test results" fontIcon="history"></mat-icon>History
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item>
+            <mat-icon aria-hidden="false" aria-label="Sign out" fontIcon="logout" class="text-red-500" style="color: rgb(239 68 68);"></mat-icon>
+            <span class="text-red-500">Sign out</span>
+        </button>
+    </mat-menu>
 </section>

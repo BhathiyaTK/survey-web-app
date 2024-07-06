@@ -20,6 +20,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
 
 import { MainComponent } from './pages/main/main.component';
 import { NavbarComponent } from './common/navbar/navbar.component';
@@ -27,6 +29,10 @@ import { CopyrightComponent } from './common/copyright/copyright.component';
 import { CareerTestComponent } from './pages/main/career-test/career-test.component';
 import { WelcomeComponent } from './pages/main/welcome/welcome.component';
 import { DialogComponent } from './common/dialog/dialog.component';
+import { LandingComponent } from './pages/landing/landing.component';
+import { PublicNavbarComponent } from './common/public-navbar/public-navbar.component';
+import { PublicFooterComponent } from './common/public-footer/public-footer.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -39,6 +45,9 @@ import { DialogComponent } from './common/dialog/dialog.component';
     CareerTestComponent,
     WelcomeComponent,
     DialogComponent,
+    LandingComponent,
+    PublicNavbarComponent,
+    PublicFooterComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,9 +65,12 @@ import { DialogComponent } from './common/dialog/dialog.component';
     MatButtonModule,
     MatTableModule,
     DragDropModule,
-    MatDialogModule
+    MatDialogModule,
+    MatMenuModule,
+    MatDividerModule,
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
