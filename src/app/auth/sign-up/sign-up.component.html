@@ -2,7 +2,7 @@
     <div class="relative w-[45%] h-screen flex justify-center items-center bg-white">
         <div class="w-full md:w-[55%]">
             <div class="absolute top-16">
-                <a routerLink="/" class="flex flex-row align-center">
+                <a routerLink="/" class="flex flex-row items-center">
                     <mat-icon aria-hidden="false" aria-label="back to landing page" fontIcon="arrow_back" class="me-2"></mat-icon>Home
                 </a>
             </div>
@@ -44,11 +44,22 @@
                 <button class="btn primary-btn w-full px-3 py-4 mt-5 uppercase tracking-wider">Sign Up</button>
             </form>
             <div class="absolute bottom-16 left-1/2 -translate-x-1/2">
-                Already have an account? <a routerLink="/sign-in">Sign in</a>
+                Already have an account? <a routerLink="/sign-in" class="inter-medium">Sign in</a>
             </div>
         </div>
     </div>
-    <div class="w-[55%] h-screen bg-blue-500">
-        
+    <div class="w-[55%] h-screen sign-up-bg flex justify-center items-center">
+        <div class="w-full h-screen bg-blue-500/[0.6] flex justify-center items-end pb-28">
+            <div class="flex flex-row justify-between items-center rounded-2xl bg-white w-[75%] overflow-hidden shadow-lg">
+                <div class="ps-10 pe-3 py-6 w-[70%]">
+                    <i class="fa-solid fa-quote-left fa-3x text-gray-300"></i>
+                    <p class="mb-3 inter-regular italic">{{quotesList[selectedQuoteIndex].desc}}</p>
+                    <span class="inter-semibold">— {{quotesList[selectedQuoteIndex].person}}</span>&nbsp;|&nbsp;<small>{{quotesList[selectedQuoteIndex].title}}</small>
+                </div>
+                <div class="w-[30%] pt-3">
+                    <img class="grayscale" [src]="quotesList[selectedQuoteIndex].pic" [alt]="quotesList[selectedQuoteIndex].person">
+                </div>
+            </div>
+        </div>
     </div>
 </section>

@@ -443,17 +443,17 @@
                     <div class="border rounded-md bg-white">
                       <div cdkDropList (cdkDropListDropped)="drop($event)" class="dragging-list">
                         <div class="p-3 border-b last:border-b-0 cursor-move bg-white first:rounded-t-md last:rounded-b-md 
-                                    hover:bg-blue-100 dragging-box flex flex-row justify-between align-center" 
+                                    hover:bg-blue-100 dragging-box flex flex-row justify-between items-center" 
                             *ngFor="let careerPref of careerPrefList; let i = index" 
                             cdkDrag cdkDragLockAxis="y" (cdkDragMoved)="dragging($event)">
                             <div>{{i+1 + '.&nbsp;&nbsp;&nbsp;' + careerPref}}</div>
-                            <div class="flex flex-row align-center space-x-4 upAndDownButtons">
+                            <div class="flex flex-row items-center space-x-4 upAndDownButtons">
                               <button type="button" [title]="i === 0 ? '' : 'Move up'" aria-label="Move up" (click)="moveUp(i)" [disabled]="i === 0"
-                                class="flex justify-center align-center border rounded-full bg-white" [ngClass]="(i === 0) ? 'text-gray-300 border-gray-300' : 'border-gray-400'">
+                                class="flex justify-center items-center border rounded-full bg-white" [ngClass]="(i === 0) ? 'text-gray-300 border-gray-300' : 'border-gray-400'">
                                 <mat-icon aria-hidden="false" fontIcon="expand_less"></mat-icon>
                               </button>
                               <button type="button" [title]="i === careerPrefList.length-1 ? '' : 'Move down'" aria-label="Move down" (click)="moveDown(i)" [disabled]="i === careerPrefList.length-1"
-                                class="flex justify-center align-center border rounded-full bg-white" [ngClass]="(i === careerPrefList.length-1) ? 'text-gray-300 border-gray-300' : 'border-gray-400'">
+                                class="flex justify-center items-center border rounded-full bg-white" [ngClass]="(i === careerPrefList.length-1) ? 'text-gray-300 border-gray-300' : 'border-gray-400'">
                                 <mat-icon aria-hidden="false" fontIcon="expand_more"></mat-icon>
                               </button>
                             </div>
@@ -468,7 +468,7 @@
           </div>
         </div>
         <div>
-          <div class="flex flex-row align-center">
+          <div class="flex flex-row items-center">
             <div class="border-r pr-5">
               <button matStepperPrevious class="btn secondary-btn px-7 py-2 mr-4">Back</button>
               <button class="btn success-btn px-7 py-2">Submit</button>
