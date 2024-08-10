@@ -10,35 +10,37 @@
                 <h5 class="mb-1 font-medium">Welcome back!</h5>
                 <h1 class="text-4xl font-bold">Sign in to your Account</h1>
             </div>
-            <form>
+            <form [formGroup]="signinForm" (ngSubmit)="singIn()">
                 <mat-form-field class="w-full">
                     <mat-label>Email</mat-label>
-                    <input type="email" matInput placeholder="Ex. name@example.com">
+                    <input type="email" matInput placeholder="Ex. name@example.com" formControlName="email">
+                    <div *ngIf="sign_in['email'].touched && sign_in['email'].invalid">
+                        <div *ngIf="sign_in['email'].errors && sign_in['email'].errors['required']" class="text-xs text-red-500">Email is required.</div>
+                        <div *ngIf="sign_in['email'].errors && (sign_in['email'].errors['email'] || sign_in['email'].errors['pattern'])" class="text-xs text-red-500">Invalid email format. Ex: content@example.com</div>
+                    </div>
                 </mat-form-field>
                 <mat-form-field class="w-full relative">
                     <mat-label>Password</mat-label>
-                    <input [type]="showPassword ? 'text' : 'password'" matInput>
+                    <input [type]="showPassword ? 'text' : 'password'" matInput formControlName="password">
                     <mat-icon aria-hidden="false" (click)="togglePasswordVisibility()" 
                         [fontIcon]="showPassword ? 'visibility_off' : 'visibility'" 
-                        class="absolute right-0 top-1/2 -translate-y-1/2 text-blue-500"></mat-icon>
+                        class="absolute right-0 top-1/2 -translate-y-1/2 text-blue-500 hover:cursor-pointer"></mat-icon>
+                    <div *ngIf="sign_in['password'].touched && sign_in['password'].invalid">
+                        <div *ngIf="sign_in['password'].errors && sign_in['password'].errors['required']" class="text-xs text-red-500">Password is required.</div>
+                        <div *ngIf="sign_in['password'].errors && sign_in['password'].errors['minlength']" class="text-xs text-red-500">Password must be at least 6 characters.</div>
+                    </div>
                 </mat-form-field>
-                <!-- <div class="mb-3">
-                    <label for="userEmail">Email</label><br>
-                    <input type="email" name="userEmail" id="userEmail" required>
-                </div>
-                <div class="mb-7">
-                    <label for="userPassword">Password</label><br>
-                    <input type="password" name="userPassword" id="userPassword" required>
-                </div> -->
                 <div class="flex flex-row justify-between items-center mb-5">
                     <div class="-ml-[10px]">
-                        <mat-checkbox>Remember Me!</mat-checkbox>
+                        <mat-checkbox formControlName="rememberMe">Remember Me!</mat-checkbox>
                     </div>
                     <div>
                         <a routerLink="">Forgot Password?</a>
                     </div>
                 </div>
-                <button class="btn primary-btn w-full px-3 py-4 uppercase tracking-wider">Sign In</button>
+                <button type="submit" class="btn w-full px-3 py-4 uppercase tracking-wider" 
+                    [ngClass]="{'primary-btn': signinForm.valid, 'disabled-btn':signinForm.invalid}"
+                    [disabled]="signinForm.invalid">Sign In</button>
             </form>
             <div class="absolute bottom-16 left-1/2 -translate-x-1/2">
                 Don't have an account? <a routerLink="/sign-up" class="inter-medium">Sign up</a>

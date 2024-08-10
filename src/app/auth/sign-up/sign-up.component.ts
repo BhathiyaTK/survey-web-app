@@ -1,16 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.scss']
 })
-export class SignUpComponent implements OnInit {
-  
+export class SignUpComponent implements OnInit  {
+
+  @ViewChild("password") passwordField!: ElementRef;
+
   showPassword: boolean = false;
   showConfPassword: boolean = false;
   selectedQuoteIndex!: number;
   selectedQuote: any[] = [];
+  passwordFieldPosition: number = 0;
+  isPasswordValidBoxShow: boolean = false;
+  positionOfPasswordValidBox: any;
+  passwordReqs: any = {};
+  confirmPasswordReqs: any = {};
 
   quotesList = [
     { person: "Steve Jobs", title: "Founder of Apple Inc.", pic: "assets/images/quotes/steve_jobs.png", desc: "That's been one of my mantras - focus and simplicity. Simple can be harder than complex: You have to work hard to get your thinking clean to make it simple. But it's worth it in the end because once you get there, you can move mountains." },
@@ -20,8 +31,24 @@ export class SignUpComponent implements OnInit {
     { person: "Bill Gates", title: "Co-Founder of Microsoft", pic: "assets/images/quotes/bill_gates.png", desc: "We always overestimate the change that will occur in the next two years and underestimate the change that will occur in the next ten. Don’t let yourself be lulled into inaction."}
   ];
 
+  constructor(private auth: AuthService, private router: Router) {}
+
+  signupForm = new FormGroup({
+    firstName: new FormControl('', [Validators.required]),
+    lastName: new FormControl('', [Validators.required]) ,
+    email: new FormControl('', [Validators.required, Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,7}$/)]) ,
+    password: new FormControl('', [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).*$/)]),
+    confirmPassword: new FormControl('', [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).*$/)])
+  });
+
   ngOnInit(): void {
     this.pickQuoteIndex();
+
+    let datas = document.getElementById("password")?.getBoundingClientRect();
+  }
+
+  get sign_up() {
+    return this.signupForm.controls;
   }
 
   pickQuoteIndex(): void {
@@ -33,5 +60,41 @@ export class SignUpComponent implements OnInit {
   }
   toggleConfPasswordVisibility(): void {
     this.showConfPassword = !this.showConfPassword;
+  }
+
+  togglePasswordValidBox(isConfPass: boolean): void {
+    this.isPasswordValidBoxShow = true;
+    if (isConfPass) {
+      this.positionOfPasswordValidBox = '39.3rem';
+    } else {
+      this.positionOfPasswordValidBox = '34.5rem'
+    }
+  }
+
+  validatePassword(passwordVal: any): void {
+    this.passwordReqs = this.auth.passwordValidator(passwordVal);
+  }
+
+  validateConfirmPassword(passwordVal: any): void {
+    this.confirmPasswordReqs = this.auth.passwordValidator(passwordVal);
+  }
+
+  signUp(): void {
+    if (this.signupForm.valid) {
+      const signupObj: any = this.signupForm.value;
+      signupObj['Role'] = 'user';
+      this.auth.signUp(this.signupForm.value).subscribe({
+        next: (res) => {
+          this.signupForm.reset();
+          this.router.navigateByUrl('/sign-in');
+        },
+        error: (err) => {
+          alert(err.error.message);
+        }
+      })
+    } else {
+      alert('Details you entered are invalid. Please validate.');
+    }
+    // console.log(this.signupForm.value);
   }
 }

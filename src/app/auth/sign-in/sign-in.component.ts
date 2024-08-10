@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -19,8 +22,20 @@ export class SignInComponent implements OnInit {
     { person: "Bill Gates", title: "Co-Founder of Microsoft", pic: "assets/images/quotes/bill_gates.png", desc: "We always overestimate the change that will occur in the next two years and underestimate the change that will occur in the next ten. Don’t let yourself be lulled into inaction."}
   ];
 
+  constructor(private auth: AuthService, private router: Router) {}
+
+  signinForm = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,7}$/)]),
+    password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    rememberMe: new FormControl(false)
+  });
+
   ngOnInit(): void {
     this.pickQuoteIndex();
+  }
+
+  get sign_in() {
+    return this.signinForm.controls;
   }
 
   pickQuoteIndex(): void {
@@ -29,5 +44,22 @@ export class SignInComponent implements OnInit {
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
+  }
+
+  singIn(): void {
+    if (this.signinForm.valid) {
+      this.auth.signIn(this.signinForm.value).subscribe({
+        next: (res) => {
+          this.signinForm.reset();
+          this.router.navigateByUrl('/main');
+        },
+        error: (err) => {
+          alert(err.error.message);
+        }
+      })
+    } else {
+      alert('Details you entered are invalid. Please validate.');
+    }
+    // console.log(this.signinForm.value);
   }
 }

@@ -33,6 +33,9 @@ import { LandingComponent } from './pages/landing/landing.component';
 import { PublicNavbarComponent } from './common/public-navbar/public-navbar.component';
 import { PublicFooterComponent } from './common/public-footer/public-footer.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -51,6 +54,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MatCheckboxModule,
@@ -68,7 +73,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     MatDialogModule,
     MatMenuModule,
     MatDividerModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    MatTooltipModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent],
