@@ -13,6 +13,7 @@
                 <!-- <p class="mt-4">Let's get you all set up so you can start testing your career goals and choose a successful pathway.</p> -->
             </div>
             <form [formGroup]="signupForm" (ngSubmit)="signUp()">
+
                 <div class="grid grid-cols-2 gap-x-5">
                     <mat-form-field class="w-full">
                         <mat-label>First Name</mat-label>
@@ -29,15 +30,17 @@
                         </div>
                     </mat-form-field>
                 </div>
+
                 <mat-form-field class="w-full">
                     <mat-label>Email</mat-label>
                     <input type="email" matInput formControlName="email" placeholder="Ex. name@example.com" required>
                     <div *ngIf="sign_up['email'].touched && sign_up['email'].invalid">
                         <div *ngIf="sign_up['email'].errors && sign_up['email'].errors['required']" class="text-xs text-red-500">Email is required.</div>
-                        <div *ngIf="sign_up['email'].errors && (sign_up['email'].errors['email'] || sign_up['email'].errors['pattern'])" class="text-xs text-red-500">Invalid email format. Ex: content@example.com</div>
+                        <div *ngIf="sign_up['email'].errors && (sign_up['email'].errors['email'] || sign_up['email'].errors['pattern'])" class="text-xs text-red-500">Invalid email format. Ex: content&commat;example.com</div>
                     </div>
                 </mat-form-field>
-                <mat-form-field class="w-full relative" id="password" #password (click)="togglePasswordValidBox(false)">
+
+                <mat-form-field class="w-full relative" id="password" #password (click)="togglePasswordValidBox(); isConfPassword = false; validatePassword(signupForm.get('password')?.value)">
                     <mat-label>Password</mat-label>
                     <input [type]="showPassword ? 'text' : 'password'" matInput formControlName="password" required (keyup)="validatePassword(signupForm.get('password')?.value)">
                     <mat-icon aria-hidden="false" (click)="togglePasswordVisibility()" 
@@ -45,53 +48,31 @@
                         class="absolute right-0 top-1/2 -translate-y-1/2 text-blue-500 hover:cursor-pointer"></mat-icon>
                     <div *ngIf="sign_up['password'].touched && sign_up['password'].invalid">
                         <div *ngIf="sign_up['password'].errors && sign_up['password'].errors['required']" class="text-xs text-red-500">Password is required.</div>
-                        <!-- <div *ngIf="sign_up['password'].errors && sign_up['password'].errors['minlength']" class="text-xs text-red-500">Password must be at least 6 characters.</div> -->
                     </div>
                 </mat-form-field>
-                <mat-form-field class="w-full relative" (click)="togglePasswordValidBox(true)">
+
+                <mat-form-field class="w-full relative" (click)="togglePasswordValidBox(); isConfPassword = true; validateConfirmPassword(signupForm.get('confirmPassword')?.value)">
                     <mat-label>Confirm Password</mat-label>
-                    <input [type]="showConfPassword ? 'text' : 'password'" matInput formControlName="confirmPassword" required >
+                    <input [type]="showConfPassword ? 'text' : 'password'" matInput formControlName="confirmPassword" required (keyup)="validateConfirmPassword(signupForm.get('confirmPassword')?.value)">
                     <mat-icon aria-hidden="false" (click)="toggleConfPasswordVisibility()" 
                         [fontIcon]="showConfPassword ? 'visibility_off' : 'visibility'" 
                         class="absolute right-0 top-1/2 -translate-y-1/2 text-blue-500 hover:cursor-pointer"></mat-icon>
                     <div *ngIf="sign_up['confirmPassword'].touched && sign_up['confirmPassword'].invalid">
                         <div *ngIf="sign_up['confirmPassword'].errors && sign_up['confirmPassword'].errors['required']" class="text-xs text-red-500">Confirm Password is required.</div>
-                        <div *ngIf="sign_up['confirmPassword'].errors && sign_up['confirmPassword'].errors['minlength']" class="text-xs text-red-500">Confirm Password must be at least 6 characters.</div>
                     </div>
+                    <div *ngIf="sign_up['confirmPassword'].touched && (sign_up['confirmPassword'].value !== '') && signupForm.errors?.['passwordMismatchError']" class="text-xs text-red-500">Confirm password is NOT matching with the password field</div>
                 </mat-form-field>
+
                 <button type="submit" class="btn w-full px-3 py-4 mt-5 uppercase tracking-wider" 
                     [ngClass]="{'primary-btn': signupForm.valid, 'disabled-btn':signupForm.invalid}"
                     [disabled]="signupForm.invalid">Sign Up</button>
+
             </form>
             <div class="absolute bottom-16 left-1/2 -translate-x-1/2">
                 Already have an account? <a routerLink="/sign-in" class="inter-medium">Sign in</a>
             </div>
         </div>
-        <div *ngIf="isPasswordValidBoxShow" class="absolute top-[{{positionOfPasswordValidBox}}] -right-16 -translate-y-1/2 w-[250px] border rounded-lg shadow-xl bg-white p-4 text-xs">
-            <div class="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-[20px] h-[20px] border-l border-b rotate-45 bg-white"></div>
-            <ul class="list-inside">
-                <li class="flex items-center">
-                    <mat-icon aria-hidden="false" aria-label="check mark" [fontIcon]="passwordReqs.has6characters ? 'done' : 'close'" class="text-sm font-bold {{passwordReqs.has6characters ? 'text-green-400' : 'text-red-400'}}"></mat-icon>
-                    <span [ngClass]="{'text-gray-400': !passwordReqs.has6characters}">At least 6 characters</span>
-                </li>
-                <li class="flex items-center">
-                    <mat-icon aria-hidden="false" aria-label="check mark" [fontIcon]="passwordReqs.hasUppercase ? 'done' : 'close'" class="text-sm font-bold {{passwordReqs.hasUppercase ? 'text-green-400' : 'text-red-400'}}"></mat-icon>
-                    <span [ngClass]="{'text-gray-400': !passwordReqs.hasUppercase}">One or more uppercase letter</span>
-                </li>
-                <li class="flex items-center">
-                    <mat-icon aria-hidden="false" aria-label="check mark" [fontIcon]="passwordReqs.hasLowercase ? 'done' : 'close'" class="text-sm font-bold {{passwordReqs.hasLowercase ? 'text-green-400' : 'text-red-400'}}"></mat-icon>
-                    <span [ngClass]="{'text-gray-400': !passwordReqs.hasLowercase}">One or more lowercase latter</span>
-                </li>
-                <li class="flex items-center">
-                    <mat-icon aria-hidden="false" aria-label="check mark" [fontIcon]="passwordReqs.hasNumbers ? 'done' : 'close'" class="text-sm font-bold {{passwordReqs.hasNumbers ? 'text-green-400' : 'text-red-400'}}"></mat-icon>
-                    <span [ngClass]="{'text-gray-400': !passwordReqs.hasNumbers}">One or more 0-9 number</span>
-                </li>
-                <li class="flex items-center">
-                    <mat-icon aria-hidden="false" aria-label="check mark" [fontIcon]="passwordReqs.hasSpecialChars ? 'done' : 'close'" class="text-sm font-bold {{passwordReqs.hasSpecialChars ? 'text-green-400' : 'text-red-400'}}"></mat-icon>
-                    <span [ngClass]="{'text-gray-400': !passwordReqs.hasSpecialChars}">One or more special character</span>
-                </li>
-            </ul>
-        </div>
+        <ng-container [ngTemplateOutlet]="pwValidateBox" [ngTemplateOutletContext]="{content: isConfPassword ? confirmPasswordReqs : passwordReqs}"></ng-container>
     </div>
     <div class="w-[55%] h-screen sign-up-bg flex justify-center items-center">
         <div class="w-full h-screen bg-blue-500/[0.6] flex justify-center items-end pb-28">
@@ -108,3 +89,31 @@
         </div>
     </div>
 </section>
+
+<ng-template #pwValidateBox let-content="content">
+    <div *ngIf="isPasswordValidBoxShow" class="absolute -right-16 w-[250px] border rounded-lg shadow-xl bg-white p-4 text-xs" [ngClass]="{'top-[35rem]': isConfPassword, 'top-[29.3rem]': !isConfPassword}">
+        <div class="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-[20px] h-[20px] border-l border-b rotate-45 bg-white"></div>
+        <ul class="list-inside">
+            <li class="flex items-center">
+                <mat-icon aria-hidden="false" aria-label="check mark" [fontIcon]="content.has6characters ? 'done' : 'close'" class="text-sm font-bold {{content.has6characters ? 'text-green-400' : 'text-red-400'}}"></mat-icon>
+                <span [ngClass]="{'text-gray-400': !content.has6characters}">At least 6 characters</span>
+            </li>
+            <li class="flex items-center">
+                <mat-icon aria-hidden="false" aria-label="check mark" [fontIcon]="content.hasUppercase ? 'done' : 'close'" class="text-sm font-bold {{content.hasUppercase ? 'text-green-400' : 'text-red-400'}}"></mat-icon>
+                <span [ngClass]="{'text-gray-400': !content.hasUppercase}">One or more uppercase letter</span>
+            </li>
+            <li class="flex items-center">
+                <mat-icon aria-hidden="false" aria-label="check mark" [fontIcon]="content.hasLowercase ? 'done' : 'close'" class="text-sm font-bold {{content.hasLowercase ? 'text-green-400' : 'text-red-400'}}"></mat-icon>
+                <span [ngClass]="{'text-gray-400': !content.hasLowercase}">One or more lowercase latter</span>
+            </li>
+            <li class="flex items-center">
+                <mat-icon aria-hidden="false" aria-label="check mark" [fontIcon]="content.hasNumbers ? 'done' : 'close'" class="text-sm font-bold {{content.hasNumbers ? 'text-green-400' : 'text-red-400'}}"></mat-icon>
+                <span [ngClass]="{'text-gray-400': !content.hasNumbers}">One or more 0-9 number</span>
+            </li>
+            <li class="flex items-center">
+                <mat-icon aria-hidden="false" aria-label="check mark" [fontIcon]="content.hasSpecialChars ? 'done' : 'close'" class="text-sm font-bold {{content.hasSpecialChars ? 'text-green-400' : 'text-red-400'}}"></mat-icon>
+                <span [ngClass]="{'text-gray-400': !content.hasSpecialChars}">One or more special character</span>
+            </li>
+        </ul>
+    </div>
+</ng-template>

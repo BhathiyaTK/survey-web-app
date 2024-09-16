@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -34,6 +35,14 @@ export class AuthService {
     (/[0-9]/.test(password)) ? this.passwordReqs['hasNumbers'] = true : this.passwordReqs['hasNumbers'] = false;
     (/[\W_]/.test(password)) ? this.passwordReqs['hasSpecialChars'] = true : this.passwordReqs['hasSpecialChars'] = false;
     return this.passwordReqs;
+  }
+
+  customPasswordMatching(control: AbstractControl): ValidationErrors | null {
+    console.log(control);
+    const password = control.get('password')?.value;
+    const confirmPassword = control.get('confirmPassword')?.value;
+    
+    return password === confirmPassword ? null : { passwordMismatchError: true };
   }
 
 
