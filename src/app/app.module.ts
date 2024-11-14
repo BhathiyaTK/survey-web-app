@@ -36,6 +36,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { HttpClientModule } from '@angular/common/http';
+import { ProfileComponent } from './pages/main/profile/profile.component';
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,7 @@ import { HttpClientModule } from '@angular/common/http';
     LandingComponent,
     PublicNavbarComponent,
     PublicFooterComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -75,7 +78,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatDividerModule,
     FontAwesomeModule,
     MatTooltipModule,
-    HttpClientModule
+    HttpClientModule,
+    MatChipsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

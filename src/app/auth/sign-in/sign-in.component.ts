@@ -13,6 +13,7 @@ export class SignInComponent implements OnInit {
   showPassword: boolean = false;
   selectedQuoteIndex!: number;
   selectedQuote: any[] = [];
+  isSigningIn: boolean = false;
 
   quotesList = [
     { person: "Steve Jobs", title: "Founder of Apple Inc.", pic: "assets/images/quotes/steve_jobs.png", desc: "That's been one of my mantras - focus and simplicity. Simple can be harder than complex: You have to work hard to get your thinking clean to make it simple. But it's worth it in the end because once you get there, you can move mountains." },
@@ -47,14 +48,18 @@ export class SignInComponent implements OnInit {
   }
 
   singIn(): void {
+    this.isSigningIn = true;
     if (this.signinForm.valid) {
       this.auth.signIn(this.signinForm.value).subscribe({
         next: (res) => {
           this.signinForm.reset();
           this.router.navigateByUrl('/main');
+          this.isSigningIn = false;
+          localStorage.setItem('techxplore_token', res.token);
         },
         error: (err) => {
           alert(err.error.message);
+          this.isSigningIn = false;
         }
       })
     } else {

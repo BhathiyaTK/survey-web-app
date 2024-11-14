@@ -192,3 +192,12 @@ a {
 .inter-extralight {
     font-family: 'inter-extralight', sans-serif;
 }
+
+// Redio button styles
+
+.vertical-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+    align-items: flex-start;
+}

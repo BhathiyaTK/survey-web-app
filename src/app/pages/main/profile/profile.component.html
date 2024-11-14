@@ -1,0 +1,74 @@
+<section class="container mx-auto">
+    <div class="flex flex-row justify-between py-5">
+        <div class="w-[74%] h-fit rounded-xl bg-gray-50 border p-5">
+            <div class="flex items-center justify-between gap-3">
+                <div>
+                    <h1 class="text-3xl font-bold mb-2">Personal Skill Tracker</h1>
+                    <p class="text-gray-500">
+                        Monitor your progress with "Skill Tracking" feature
+                    </p>
+                </div>
+                <div>
+                    <a (click)="goBack();" class="btn primary-btn px-4 py-2 flex items-center cursor-pointer">
+                        <mat-icon aria-hidden="false" aria-label="Go back to home page" fontIcon="keyboard_backspace" class="me-2"></mat-icon>Go back
+                    </a>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="grid grid-cols-5 gap-4">
+                <div class="border-r">
+                    <label id="vertical-radio-group-label">Records saved on</label>
+                    <mat-radio-group
+                    aria-labelledby="vertical-radio-group-label"
+                    class="vertical-radio-group">
+                        <mat-radio-button class="vertical-radio-button mb-3 last:mb-0 text-sm" *ngFor="let progress of progressList" [value]="progress">
+                            <span>{{progress.date}}</span><br>
+                            <span class="text-gray-400">{{progress.time}}</span>
+                        </mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div class="col-span-4">
+                    <h2 class="text-2xl font-bold mb-4">Skills</h2>
+                    <div class="grid grid-cols-2 gap-14">
+                        <div>
+                            <div class="flex justify-between align-center mb-2">
+                                <span>Hands-on skills with tech stacks</span>
+                                <span>70%</span>
+                            </div>
+                            <mat-progress-bar mode="determinate" value="70"></mat-progress-bar>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w-[25%] h-fit rounded-xl bg-gray-50 border p-5">
+            <div class="mb-4">
+                <img src="assets/images/sample-profile.jpg" alt="User Profile" width="130" height="130" class="rounded-full mx-auto">
+            </div>
+            <div class="text-center mb-4">
+                <h1 class="font-semibold text-lg">{{user.firstName + '&nbsp;' + user.lastName}}</h1>
+                <p class="text-sm">{{user.email}}</p>
+            </div>
+            <div class="text-center mb-4">
+                <mat-chip color="accent" class="bg-green-400">
+                    <span class="capitalize text-sm">{{user.role}}</span>
+                </mat-chip>
+            </div>
+            <mat-divider></mat-divider>
+            <div class="mt-4">
+                <span class="flex flex-row items-center mb-4">
+                    <mat-icon aria-hidden="false" aria-label="Phone" fontIcon="call" class="me-3 text-[22px] text-gray-400"></mat-icon><span class="capitalize">{{'Not added yet'}}</span>
+                </span>
+                <span class="flex flex-row items-center mb-4">
+                    <mat-icon aria-hidden="false" aria-label="Department" fontIcon="domain" class="me-3 text-[22px] text-gray-400"></mat-icon><span class="capitalize">{{'Not added yet'}}</span>
+                </span>
+                <span class="flex flex-row items-center mb-4">
+                    <mat-icon aria-hidden="false" aria-label="Degree" fontIcon="school" class="me-3 text-[22px] text-gray-400"></mat-icon><span class="capitalize">{{'Not added yet'}}</span>
+                </span>
+                <span class="flex flex-row items-center mb-4">
+                    <mat-icon aria-hidden="false" aria-label="Acedamic Year" fontIcon="workspace_premium" class="me-3 text-[22px] text-gray-400"></mat-icon><span class="capitalize">{{'Not added yet'}}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+</section>

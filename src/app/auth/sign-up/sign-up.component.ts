@@ -128,6 +128,5 @@ export class SignUpComponent implements OnInit {
     } else {
       alert('Details you entered are invalid. Please validate.');
     }
-    // console.log(this.signupForm.value);
   }
 }

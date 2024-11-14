@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { jwtDecode } from 'jwt-decode';
 import { Observable } from 'rxjs';
+import { CustomToken } from '../interface/custom-token';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +45,16 @@ export class AuthService {
     const confirmPassword = control.get('confirmPassword')?.value;
     
     return password === confirmPassword ? null : { passwordMismatchError: true };
+  }
+
+  decodeToken(): any {
+    const token = localStorage.getItem('techxplore_token');
+    if (token) {
+      const decodedToken = jwtDecode<CustomToken>(token);
+      return decodedToken;
+    } else {
+      return null;
+    }
   }
 
 

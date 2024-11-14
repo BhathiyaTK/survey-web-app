@@ -16,7 +16,7 @@
                     <input type="email" matInput placeholder="Ex. name@example.com" formControlName="email">
                     <div *ngIf="sign_in['email'].touched && sign_in['email'].invalid">
                         <div *ngIf="sign_in['email'].errors && sign_in['email'].errors['required']" class="text-xs text-red-500">Email is required.</div>
-                        <div *ngIf="sign_in['email'].errors && (sign_in['email'].errors['email'] || sign_in['email'].errors['pattern'])" class="text-xs text-red-500">Invalid email format. Ex: content@example.com</div>
+                        <div *ngIf="sign_in['email'].errors && (sign_in['email'].errors['email'] || sign_in['email'].errors['pattern'])" class="text-xs text-red-500">Invalid email format. Ex: content&#64;example.com</div>
                     </div>
                 </mat-form-field>
                 <mat-form-field class="w-full relative">
@@ -39,8 +39,10 @@
                     </div>
                 </div>
                 <button type="submit" class="btn w-full px-3 py-4 uppercase tracking-wider" 
-                    [ngClass]="{'primary-btn': signinForm.valid, 'disabled-btn':signinForm.invalid}"
-                    [disabled]="signinForm.invalid">Sign In</button>
+                    [ngClass]="{'primary-btn': signinForm.valid || !isSigningIn, 'disabled-btn':signinForm.invalid || isSigningIn}"
+                    [disabled]="signinForm.invalid || isSigningIn">
+                    {{isSigningIn ? 'Signing In...' : 'Sign In'}}
+                </button>
             </form>
             <div class="absolute bottom-16 left-1/2 -translate-x-1/2">
                 Don't have an account? <a routerLink="/sign-up" class="inter-medium">Sign up</a>

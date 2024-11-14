@@ -2,10 +2,10 @@
   <div class="flex flex-row items-center justify-between space-x-8">
     <h1 class="text-4xl font-bold">Career Test</h1>
     <button (click)="openDialog()"
-     class="flex flex-row items-center space-x-1.5 text-blue-500 border border-blue-500 rounded-md px-4 py-2 hover:bg-blue-500 hover:text-white transition"
+     class="flex flex-row items-center space-x-1.5 text-red-500 border border-red-500 rounded-md px-4 py-2 hover:bg-red-500 hover:text-white transition"
       title="Exit test">
       <mat-icon aria-hidden="false" aria-label="back to welcome page" fontIcon="cancel"></mat-icon>
-      <span>Exit</span>
+      <span>End the Test</span>
     </button>
   </div>
 
@@ -26,12 +26,12 @@
           </div>
           <div>
             <!-- step 1 form starts -->
-            <form>
+            <form [formGroup]="stepOneFormGroup">
               <ol class="ml-4">
                 <li>
                   <div>
                     <p class="mb-4">Cumulative Grade Point Average (CGPA) value:</p>
-                    <input type="text" name="" id="" placeholder="Please enter a number less than or equal to 4.2"
+                    <input type="number" formControlName="cgpa" min="0" max="4.2" placeholder="Please enter a number less than or equal to 4.2"
                       class="test-form-field">
                   </div>
                 </li>
@@ -40,23 +40,33 @@
                     <p class="mb-4">Specify the <span class="font-semibold">grades</span> received for the following
                       undergraduate course modules.</p>
                     <div class="border rounded-md bg-white">
-                      <div class="grid grid-cols-8 w-full text-center font-medium py-3 border-b">
-                        <div class="col-span-2"></div>
-                        <div>A+/A</div>
-                        <div>A-</div>
-                        <div>B+</div>
-                        <div>B</div>
-                        <div>B-</div>
-                        <div>C+/C/C-/D</div>
+                      <div class="grid grid-cols-12 w-full py-3 border-b">
+                        <div class="col-span-3"></div>
+                        <div class="col-span-9">
+                          <div class="grid grid-cols-12 w-full text-center font-medium">
+                            <div>A+</div>
+                            <div>A</div>
+                            <div>A-</div>
+                            <div>B+</div>
+                            <div>B</div>
+                            <div>B-</div>
+                            <div>C+</div>
+                            <div>C</div>
+                            <div>C-</div>
+                            <div>D+</div>
+                            <div>D</div>
+                            <div>E</div>
+                          </div>
+                        </div>
                       </div>
-                      <ng-container *ngFor="let item of displayedRowsStep1">
-                        <div class="grid grid-cols-8 w-full text-center py-2.5 border-b">
-                          <div class="col-span-2 text-left pl-5 flex flex-wrap items-center">{{item.subject}}</div>
-                          <div class="col-span-6">
-                            <mat-radio-group>
+                      <ng-container *ngFor="let item of displayedRowsStep1; let i = index">
+                        <div class="grid grid-cols-12 w-full text-center py-2.5 border-b">
+                          <div class="col-span-3 text-left pl-5 flex flex-wrap items-center">{{item.subject}}</div>
+                          <div class="col-span-9">
+                            <mat-radio-group [formControl]="getControl(i, 1)">
                               <div class="flex flex-row items-center justify-around">
-                                <ng-container *ngFor="let option of radioOptionCounter(item.radioOptCount); let i = index">
-                                  <mat-radio-button [value]="(i === 0) ? 'A+/A' : ((i === 1) ? 'A-' : ((i === 2) ? 'B+' : ((i === 3) ? 'B' : ((i === 4) ? 'B-' : 'C+/C/C-/D'))))"></mat-radio-button>
+                                <ng-container *ngFor="let option of radioOptionCounter(item.radioOptCount); let idx = index">
+                                  <mat-radio-button [value]="academicGradesList[idx]"></mat-radio-button>
                                 </ng-container>
                               </div>
                             </mat-radio-group>
@@ -72,7 +82,7 @@
           </div>
         </div>
         <div>
-          <button matStepperNext class="btn primary-btn px-7 py-2">Next</button>
+          <button matStepperNext (click)="step1Next()" class="btn primary-btn px-7 py-2">Next</button>
         </div>
       </mat-step>
       <mat-step>
@@ -89,7 +99,7 @@
           </div>
           <div>
             <!-- step 2 form starts -->
-            <form>
+            <form [formGroup]="stepTwoFormGroup">
               <ol class="ml-4">
                 <li>
                   <div>
@@ -103,14 +113,14 @@
                         <div>Frequently</div>
                         <div>Very Frequently</div>
                       </div>
-                      <ng-container *ngFor="let item of displayedRowsStep2">
+                      <ng-container *ngFor="let item of displayedRowsStep2; let i = index">
                         <div class="grid grid-cols-7 w-full text-center py-2.5 border-b">
                           <div class="col-span-2 text-left pl-5 flex flex-wrap items-center">{{item.task}}</div>
                           <div class="col-span-5">
-                            <mat-radio-group>
+                            <mat-radio-group [formControl]="getControl(i, 2)">
                               <div class="flex flex-row items-center justify-around">
-                                <ng-container *ngFor="let option of radioOptionCounter(item.radioOptCount); let i = index">
-                                  <mat-radio-button [value]="(i === 0) ? 'Never' : ((i === 1) ? 'Rarely' : ((i === 2 ? 'Sometimes' : ((i === 3) ? 'Frequently' : 'Very Frequently'))))"></mat-radio-button>
+                                <ng-container *ngFor="let option of radioOptionCounter(item.radioOptCount); let idx = index">
+                                  <mat-radio-button [value]="idx+1"></mat-radio-button>
                                 </ng-container>
                               </div>
                             </mat-radio-group>
@@ -124,7 +134,7 @@
                   <div>
                     <p class="mb-4">If you have undertaken any <span class="font-semibold">open-source projects</span> during the undergraduate period, rate your experience on a scale of 1-5.</p>
                     <div class="border rounded-md bg-white w-fit">
-                      <mat-radio-group aria-label="Select an option">
+                      <mat-radio-group formControlName="openSourcesProjects" aria-label="Select an option">
                         <div class="flex flex-row">
                           <ng-container *ngFor="let item of radioOptionCounter(5); let i = index;">
                             <div class="border-r last:border-none px-5 py-2">
@@ -140,7 +150,7 @@
                   <div>
                     <p class="mb-4">If you have completed an <span class="font-semibold">undergraduate dissertation (research project)</span>, rate your performance on a scale of 1-5.</p>
                     <div class="border rounded-md bg-white w-fit">
-                      <mat-radio-group aria-label="Select an option">
+                      <mat-radio-group formControlName="researchPerformance" aria-label="Select an option">
                         <div class="flex flex-row">
                           <ng-container *ngFor="let item of radioOptionCounter(5); let i = index;">
                             <div class="border-r last:border-none px-5 py-2">
@@ -159,7 +169,7 @@
         </div>
         <div>
           <button matStepperPrevious class="btn secondary-btn px-7 py-2 mr-4">Back</button>
-          <button matStepperNext class="btn primary-btn px-7 py-2">Next</button>
+          <button matStepperNext (click)="step2Next()" class="btn primary-btn px-7 py-2">Next</button>
         </div>
       </mat-step>
       <mat-step>
@@ -176,13 +186,13 @@
           </div>
           <div>
             <!-- step 3 form starts -->
-            <form>
+            <form [formGroup]="stepThreeFormGroup">
               <ol class="ml-4">
                 <li>
                   <div>
                     <p class="mb-4">If you have completed an <span class="font-semibold">industrial training</span> during the undergraduate period, rate your performance on a scale of 1-5.</p>
                     <div class="border rounded-md bg-white w-fit">
-                      <mat-radio-group aria-label="Select an option">
+                      <mat-radio-group formControlName="trainingPerformance" aria-label="Select an option">
                         <div class="flex flex-row">
                           <ng-container *ngFor="let item of radioOptionCounter(5); let i = index;">
                             <div class="border-r last:border-none px-5 py-2">
@@ -206,14 +216,14 @@
                         <div>Frequently</div>
                         <div>Very Frequently</div>
                       </div>
-                      <ng-container *ngFor="let item of displayedRowsStep3">
+                      <ng-container *ngFor="let item of displayedRowsStep3; let i = index">
                         <div class="grid grid-cols-7 w-full text-center py-2.5 border-b">
                           <div class="col-span-2 text-left pl-5 flex flex-wrap items-center">{{item.task}}</div>
                           <div class="col-span-5">
-                            <mat-radio-group>
+                            <mat-radio-group [formControl]="getControl(i, 3)">
                               <div class="flex flex-row items-center justify-around">
-                                <ng-container *ngFor="let option of radioOptionCounter(item.radioOptCount); let i = index">
-                                  <mat-radio-button [value]="(i === 0) ? 'Never' : ((i === 1) ? 'Rarely' : ((i === 2 ? 'Sometimes' : ((i === 3) ? 'Frequently' : 'Very Frequently'))))"></mat-radio-button>
+                                <ng-container *ngFor="let option of radioOptionCounter(item.radioOptCount); let idx = index">
+                                  <mat-radio-button [value]="idx+1"></mat-radio-button>
                                 </ng-container>
                               </div>
                             </mat-radio-group>
@@ -230,7 +240,7 @@
         </div>
         <div>
           <button matStepperPrevious class="btn secondary-btn px-7 py-2 mr-4">Back</button>
-          <button matStepperNext class="btn primary-btn px-7 py-2">Next</button>
+          <button matStepperNext (click)="step3Next()" class="btn primary-btn px-7 py-2">Next</button>
         </div>
       </mat-step>
       <mat-step>
@@ -247,7 +257,7 @@
           </div>
           <div>
             <!-- step 4 form starts -->
-            <form>
+            <form [formGroup]="stepFourFormGroup">
               <ol class="ml-4">
                 <li>
                   <div>
@@ -261,14 +271,14 @@
                         <div>4</div>
                         <div>5</div>
                       </div>
-                      <ng-container *ngFor="let item of displayedRowsStep4_1">
+                      <ng-container *ngFor="let item of displayedRowsStep4_1; let i = index">
                         <div class="grid grid-cols-7 w-full text-center py-2.5 border-b">
                           <div class="col-span-2 text-left pl-5 flex flex-wrap items-center">{{item.task}}</div>
                           <div class="col-span-5">
-                            <mat-radio-group>
+                            <mat-radio-group [formControl]="getControl(i, 4.1)">
                               <div class="flex flex-row items-center justify-around">
-                                <ng-container *ngFor="let option of radioOptionCounter(item.radioOptCount); let i = index">
-                                  <mat-radio-button [value]="(i === 0) ? '1' : ((i === 1) ? '2' : ((i === 2 ? '3' : ((i === 3) ? '4' : '5'))))"></mat-radio-button>
+                                <ng-container *ngFor="let option of radioOptionCounter(item.radioOptCount); let idx1 = index">
+                                  <mat-radio-button [value]="idx1+1"></mat-radio-button>
                                 </ng-container>
                               </div>
                             </mat-radio-group>
@@ -290,14 +300,14 @@
                         <div>4</div>
                         <div>5</div>
                       </div>
-                      <ng-container *ngFor="let item of displayedRowsStep4_2">
+                      <ng-container *ngFor="let item of displayedRowsStep4_2; let j = index">
                         <div class="grid grid-cols-7 w-full text-center py-2.5 border-b">
                           <div class="col-span-2 text-left pl-5 flex flex-wrap items-center">{{item.task}}</div>
                           <div class="col-span-5">
-                            <mat-radio-group>
+                            <mat-radio-group [formControl]="getControl(j, 4.2)">
                               <div class="flex flex-row items-center justify-around">
-                                <ng-container *ngFor="let option of radioOptionCounter(item.radioOptCount); let i = index">
-                                  <mat-radio-button [value]="(i === 0) ? '1' : ((i === 1) ? '2' : ((i === 2 ? '3' : ((i === 3) ? '4' : '5'))))"></mat-radio-button>
+                                <ng-container *ngFor="let option of radioOptionCounter(item.radioOptCount); let idx2 = index">
+                                  <mat-radio-button [value]="idx2+1"></mat-radio-button>
                                 </ng-container>
                               </div>
                             </mat-radio-group>
@@ -314,7 +324,7 @@
         </div>
         <div>
           <button matStepperPrevious class="btn secondary-btn px-7 py-2 mr-4">Back</button>
-          <button matStepperNext class="btn primary-btn px-7 py-2">Next</button>
+          <button matStepperNext (click)="step4Next()" class="btn primary-btn px-7 py-2">Next</button>
         </div>
       </mat-step>
       <mat-step>
@@ -331,7 +341,7 @@
           </div>
           <div>
             <!-- step 5 form starts -->
-            <form>
+            <form [formGroup]="stepFiveFormGroup">
               <ol class="ml-4">
                 <li>
                   <div>
@@ -345,14 +355,14 @@
                         <div>Frequently</div>
                         <div>Very Frequently</div>
                       </div>
-                      <ng-container *ngFor="let item of displayedRowsStep5">
+                      <ng-container *ngFor="let item of displayedRowsStep5; let i = index">
                         <div class="grid grid-cols-7 w-full text-center py-2.5 border-b">
                           <div class="col-span-2 text-left pl-5 flex flex-wrap items-center">{{item.activity}}</div>
                           <div class="col-span-5">
-                            <mat-radio-group>
+                            <mat-radio-group [formControl]="getControl(i, 5)">
                               <div class="flex flex-row items-center justify-around">
-                                <ng-container *ngFor="let option of radioOptionCounter(item.radioOptCount); let i = index">
-                                  <mat-radio-button [value]="(i === 0) ? 'Never' : ((i === 1) ? 'Rarely' : ((i === 2 ? 'Sometimes' : ((i === 3) ? 'Frequently' : 'Very Frequently'))))"></mat-radio-button>
+                                <ng-container *ngFor="let option of radioOptionCounter(item.radioOptCount); let idx = index">
+                                  <mat-radio-button [value]="idx+1"></mat-radio-button>
                                 </ng-container>
                               </div>
                             </mat-radio-group>
@@ -369,7 +379,7 @@
         </div>
         <div>
           <button matStepperPrevious class="btn secondary-btn px-7 py-2 mr-4">Back</button>
-          <button matStepperNext class="btn primary-btn px-7 py-2">Next</button>
+          <button matStepperNext (click)="step5Next()" class="btn primary-btn px-7 py-2">Next</button>
         </div>
       </mat-step>
       <mat-step>
@@ -386,7 +396,7 @@
           </div>
           <div>
             <!-- step 6 form starts -->
-            <form>
+            <form [formGroup]="stepSixFormGroup">
               <ol class="ml-4">
                 <li>
                   <div>
@@ -415,7 +425,7 @@
         </div>
         <div>
           <button matStepperPrevious class="btn secondary-btn px-7 py-2 mr-4">Back</button>
-          <button matStepperNext class="btn primary-btn px-7 py-2">Next</button>
+          <button matStepperNext (click)="step6Next()" class="btn primary-btn px-7 py-2">Next</button>
         </div>
       </mat-step>
       <mat-step>
@@ -446,7 +456,7 @@
                                     hover:bg-blue-100 dragging-box flex flex-row justify-between items-center" 
                             *ngFor="let careerPref of careerPrefList; let i = index" 
                             cdkDrag cdkDragLockAxis="y" (cdkDragMoved)="dragging($event)">
-                            <div>{{i+1 + '.&nbsp;&nbsp;&nbsp;' + careerPref}}</div>
+                            <div>{{i+1 + '.&nbsp;&nbsp;&nbsp;' + careerPref['prefName']}}</div>
                             <div class="flex flex-row items-center space-x-4 upAndDownButtons">
                               <button type="button" [title]="i === 0 ? '' : 'Move up'" aria-label="Move up" (click)="moveUp(i)" [disabled]="i === 0"
                                 class="flex justify-center items-center border rounded-full bg-white" [ngClass]="(i === 0) ? 'text-gray-300 border-gray-300' : 'border-gray-400'">
@@ -471,7 +481,7 @@
           <div class="flex flex-row items-center">
             <div class="border-r pr-5">
               <button matStepperPrevious class="btn secondary-btn px-7 py-2 mr-4">Back</button>
-              <button class="btn success-btn px-7 py-2">Submit</button>
+              <button (click)="submit()" class="btn success-btn px-7 py-2">Submit</button>
             </div>
             <div class="pl-5">
               <button (click)="stepper.reset()" class="btn danger-outline-btn px-5 py-2">Reset</button>
