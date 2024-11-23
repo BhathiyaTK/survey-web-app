@@ -481,10 +481,12 @@
           <div class="flex flex-row items-center">
             <div class="border-r pr-5">
               <button matStepperPrevious class="btn secondary-btn px-7 py-2 mr-4">Back</button>
-              <button (click)="submit()" class="btn success-btn px-7 py-2">Submit</button>
+              <button (click)="step7Next()" class="btn success-btn px-7 py-2"
+                [ngClass]="{'success-btn': !isSubmitted, 'disabled-btn': isSubmitted}"
+                [disabled]="isSubmitted">{{isSubmitted ? 'Submitting...' : 'Submit'}}</button>
             </div>
             <div class="pl-5">
-              <button (click)="stepper.reset()" class="btn danger-outline-btn px-5 py-2">Reset</button>
+              <button (click)="stepper.reset()" class="btn danger-outline-btn px-5 py-2" [disabled]="isSubmitted">Reset</button>
             </div>
           </div>
         </div>

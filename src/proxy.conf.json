@@ -1,0 +1,7 @@
+{
+    "/api/*": {
+        "target": "https://icdss-v2.onrender.com/icdss",
+        "secure": false,
+        "logLevel": "debug"
+    }
+}

@@ -38,6 +38,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { HttpClientModule } from '@angular/common/http';
 import { ProfileComponent } from './pages/main/profile/profile.component';
 import { MatChipsModule } from '@angular/material/chips';
+import { WaitingDialogComponent } from './pages/main/waiting-dialog/waiting-dialog.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { MatChipsModule } from '@angular/material/chips';
     PublicNavbarComponent,
     PublicFooterComponent,
     ProfileComponent,
+    WaitingDialogComponent,
   ],
   imports: [
     BrowserModule,

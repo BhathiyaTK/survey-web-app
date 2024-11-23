@@ -14,4 +14,8 @@ export class CareerTestService {
   submitTestData(testDataObj: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/saveTestData`, testDataObj);
   }
+
+  processFuzzy(fuzzyData: any): Observable<any> {
+    return this.http.post('https://icdss-v2.onrender.com/icdss', fuzzyData);
+  }
 }

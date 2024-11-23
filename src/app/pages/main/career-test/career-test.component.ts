@@ -1,12 +1,13 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
-import { CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray, CdkDragMove } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, CdkDragMove } from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/common/dialog/dialog.component';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { CareerTestService } from 'src/app/services/career-test.service';
+import { WaitingDialogComponent } from '../waiting-dialog/waiting-dialog.component';
 
 @Component({
   selector: 'app-career-test',
@@ -15,6 +16,7 @@ import { CareerTestService } from 'src/app/services/career-test.service';
 })
 export class CareerTestComponent {
   token: any;
+  isSubmitted: boolean = false;
 
   stepOneFormGroup!: FormGroup;
   stepTwoFormGroup!: FormGroup;
@@ -23,9 +25,10 @@ export class CareerTestComponent {
   stepFiveFormGroup!: FormGroup;
   stepSixFormGroup!: FormGroup;
 
+  fuzzyObjArr: any[] = [];
   fuzzyObj: any = {};
 
-  academicGradesList: any[] = [100,80,75,70,65,60,55,50,45,40,35,29];
+  academicGradesList: any[] = [100, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 29];
 
   fuzzyIndexes: any[] = [
     [
@@ -71,11 +74,11 @@ export class CareerTestComponent {
       [0, 1, 3, 6, 9],
     ],
     [
-      [0, 8, 9, 10, 11, 15, 24],
-      [1, 8, 10, 11, 12, 13, 15],
-      [2, 8, 12, 14, 15, 26, 27],
-      [3, 8, 10, 11, 15, 16, 17],
-      [4, 8, 9, 18, 19, 20, 21],
+      [0, 6, 7, 8, 9, 13, 22],
+      [1, 6, 8, 9, 10, 11, 15],
+      [2, 6, 10, 11, 13, 24, 25],
+      [3, 6, 8, 9, 13, 14, 15],
+      [4, 6, 7, 16, 17, 18, 19],
     ],
   ];
 
@@ -117,16 +120,14 @@ export class CareerTestComponent {
   displayedRowsStep2 = [
     { task: 'Requirement elicitation and analysis', radioOptCount: 5 },
     { task: 'Architecture modelling and diagramming', radioOptCount: 5 },
-    {
-      task: 'Prototyping (mockups, wireframes, sitemaps etc.)',
-      radioOptCount: 5,
-    },
+    { task: 'Prototyping (mockups, wireframes, sitemaps etc.)', radioOptCount: 5 },
     { task: 'UI design & implementation', radioOptCount: 5 },
     { task: 'Coding and development', radioOptCount: 5 },
     { task: 'Debugging and troubleshooting', radioOptCount: 5 },
     { task: 'Unit testing', radioOptCount: 5 },
     { task: 'Bug fixing', radioOptCount: 5 },
     { task: 'Test cases development', radioOptCount: 5 },
+    { task: 'Test execution', radioOptCount: 5 },
     { task: 'Environment & Database configuration', radioOptCount: 5 },
     { task: 'Version and revision controlling', radioOptCount: 5 },
     { task: 'Deployment and maintenance', radioOptCount: 5 },
@@ -254,6 +255,11 @@ export class CareerTestComponent {
     },
     {
       activity:
+        'Placements in national or university level competitions (hackthons, ideathons, coding   challenges etc.)',
+      radioOptCount: 5,
+    },
+    {
+      activity:
         'Participation in professional development workshops and training programs',
       radioOptCount: 5,
     },
@@ -279,17 +285,17 @@ export class CareerTestComponent {
     },
     {
       activity:
+        'Active membership (Student/Associate) in charted organizations such as BCS, ACS, IESL, CSSL etc.',
+      radioOptCount: 5,
+    },
+    {
+      activity:
         'Actively engaging in online tech forums such as Stack overflow, Code Project, GitHub etc.',
       radioOptCount: 5,
     },
     {
       activity:
         'Sharing technology-related knowledge through blog posts and video tutorials.',
-      radioOptCount: 5,
-    },
-    {
-      activity:
-        'Placements in national or university level competitions (hackthons, ideathons, coding   challenges etc.)',
       radioOptCount: 5,
     },
   ];
@@ -299,10 +305,7 @@ export class CareerTestComponent {
     { prefName: 'Software Quality Assurance and Testing', prefVal: 'QA' },
     { prefName: 'Software Project Management and Delivery', prefVal: 'PM' },
     { prefName: 'User Experience Design and Engineering', prefVal: 'UX' },
-    {
-      prefName: 'Network, Systems Engineering, and Infrastructure Services',
-      prefVal: 'NT',
-    },
+    { prefName: 'Network, Systems Engineering, and Infrastructure Services', prefVal: 'INFRA' },
   ];
 
   globalCertificates: any[] = [];
@@ -383,46 +386,34 @@ export class CareerTestComponent {
 
     setTimeout(() => {
       this.globalCertificates = [
-        {
-          title: 'Dev (Oracle, AWS, Azure, Google, Apple, Salesforce, etc.)',
-          value: '1',
-        },
-        { title: 'Quality Assurance (ISTQB, ISCB etc.)', value: '2' },
-        {
-          title: 'Project Management (PMI, Scrum Alliance, SAFe etc.)',
-          value: '3',
-        },
-        {
-          title: 'UI/UX (Google, Nielsen Norman, SpringBoard etc.)',
-          value: '4',
-        },
-        {
-          title:
-            'Network/ DevOps (Cisco, Red Hat, Azure, AWS, Kubernetes, Docker, etc.)',
-          value: '5',
-        },
-        { title: 'Security (ISC2, ISACA etc.)', value: '6' },
+        { title: 'Dev (Oracle, AWS, Azure, Google, Apple, Salesforce, etc.)', value: 1 },
+        { title: 'Quality Assurance (ISTQB, ISCB etc.)', value: 1 },
+        { title: 'Project Management (PMI, Scrum Alliance, SAFe etc.)', value: 1 },
+        { title: 'UI/UX (Google, Nielsen Norman, SpringBoard etc.)', value: 1 },
+        { title: 'Network/ DevOps (Cisco, Red Hat, Azure, AWS, Kubernetes, Docker, etc.)', value: 1 },
+        { title: 'Security (ISC2, ISACA etc.)', value: 1 },
       ];
       this.diplomaCourses = [
-        { title: 'Software Engineering', value: '1' },
-        { title: 'Computer Programming', value: '2' },
-        { title: 'Web Application Development', value: '3' },
-        { title: 'Mobile Application Development', value: '4' },
-        { title: 'Software Quality Assurance', value: '5' },
-        { title: 'IT Project Management', value: '6' },
-        { title: 'Agile Project Management', value: '7' },
-        { title: 'UI/UX Design', value: '8' },
-        { title: 'Graphics and Media Design', value: '9' },
-        { title: 'Network Engineering', value: '10' },
-        { title: 'DevOps Engineering', value: '11' },
-        { title: 'System Administration', value: '12' },
-        { title: 'Hardware Engineering', value: '13' },
-        { title: 'Robotics & IoT', value: '14' },
-        { title: 'Cyber Security', value: '15' },
-        { title: 'Machine Learning & Data Science', value: '16' },
-        { title: 'SEO & Digital Marketing', value: '17' },
-        { title: 'Office Computer Application', value: '18' },
-        { title: 'Human Resource Management', value: '19' },
+        { title: 'Software Engineering', value: 1 },
+        { title: 'Computer Programming', value: 1 },
+        { title: 'Web Application Development', value: 1 },
+        { title: 'Mobile Application Development', value: 1 },
+        { title: 'Software Quality Assurance', value: 1 },
+        { title: 'Automation Testing', value: 1 },
+        { title: 'IT Project Management', value: 1 },
+        { title: 'Agile Project Management', value: 1 },
+        { title: 'UI/UX Design', value: 1 },
+        { title: 'Graphics and Media Design', value: 1 },
+        { title: 'Network Engineering', value: 1 },
+        { title: 'DevOps Engineering', value: 1 },
+        { title: 'System Administration', value: 1 },
+        { title: 'Hardware Engineering', value: 1 },
+        { title: 'Robotics & IoT', value: 1 },
+        { title: 'Cyber Security', value: 1 },
+        { title: 'Machine Learning & Data Science', value: 1 },
+        { title: 'SEO & Digital Marketing', value: 1 },
+        { title: 'Office Computer Application', value: 1 },
+        { title: 'Human Resource Management', value: 1 },
       ];
     });
   }
@@ -546,26 +537,27 @@ export class CareerTestComponent {
     });
   }
 
-  createFuzzyInputData(formDataArr: any[], step: number): Array<any> {
-    const fuzzyObjArr: any[] = [];
+  openWaitingDialog(): void {
+    this.dialog.open(WaitingDialogComponent);
+  }
+
+  createFuzzyInputData(formDataArr: any[], indexNo: number): void {
     let sumSE = 0;
     let sumQA = 0;
     let sumPM = 0;
     let sumUX = 0;
     let sumINFRA = 0;
 
-    this.fuzzyIndexes[step-1][0].map((eleVal: number) => { sumSE += formDataArr[eleVal] });
-    this.fuzzyIndexes[step-1][1].map((eleVal: number) => { sumQA += formDataArr[eleVal] });
-    this.fuzzyIndexes[step-1][2].map((eleVal: number) => { sumPM += formDataArr[eleVal] });
-    this.fuzzyIndexes[step-1][3].map((eleVal: number) => { sumUX += formDataArr[eleVal] });
-    this.fuzzyIndexes[step-1][4].map((eleVal: number) => { sumINFRA += formDataArr[eleVal] })
+    this.fuzzyIndexes[indexNo - 1][0].map((eleVal: number) => { sumSE += formDataArr[eleVal]; });
+    this.fuzzyIndexes[indexNo - 1][1].map((eleVal: number) => { sumQA += formDataArr[eleVal]; });
+    this.fuzzyIndexes[indexNo - 1][2].map((eleVal: number) => { sumPM += formDataArr[eleVal]; });
+    this.fuzzyIndexes[indexNo - 1][3].map((eleVal: number) => { sumUX += formDataArr[eleVal]; });
+    this.fuzzyIndexes[indexNo - 1][4].map((eleVal: number) => { sumINFRA += formDataArr[eleVal]; });
 
-    fuzzyObjArr.push({
-      key: step,
-      value: { SE: sumSE, QA: sumQA, PM: sumPM, UX: sumUX, INFRA: sumINFRA }
+    this.fuzzyObjArr.push({
+      key: indexNo,
+      value: { SE: sumSE, QA: sumQA, PM: sumPM, UX: sumUX, INFRA: sumINFRA },
     });
-    
-    return fuzzyObjArr;
   }
 
   arrangeOptionObj(array1: any[], array2: any[]): Array<any> {
@@ -586,9 +578,8 @@ export class CareerTestComponent {
       grades: this.arrangeOptionObj(gradesList, this.displayedRowsStep1),
     };
 
+    this.createFuzzyInputData(gradesList, 1);
     Object.assign(this.submittedDataObj.testInputsObj.step1, step1Obj);
-
-    console.log(this.createFuzzyInputData(gradesList, 1));
   }
 
   step2Next(): void {
@@ -606,6 +597,7 @@ export class CareerTestComponent {
         ?.value,
     };
 
+    this.createFuzzyInputData(projectEngmtList, 2);
     Object.assign(this.submittedDataObj.testInputsObj.step2, step2Obj);
   }
 
@@ -622,6 +614,7 @@ export class CareerTestComponent {
       ),
     };
 
+    this.createFuzzyInputData(trainingEngmtLevelList, 3);
     Object.assign(this.submittedDataObj.testInputsObj.step3, step3Obj);
   }
 
@@ -633,6 +626,8 @@ export class CareerTestComponent {
       softSkills: this.arrangeOptionObj(softSkills, this.displayedRowsStep4_2),
     };
 
+    this.createFuzzyInputData(techSkills, 4);
+    this.createFuzzyInputData(softSkills, 5);
     Object.assign(this.submittedDataObj.testInputsObj.step4, step4Obj);
   }
 
@@ -646,6 +641,7 @@ export class CareerTestComponent {
       ),
     };
 
+    this.createFuzzyInputData(extraActivities, 6);
     Object.assign(this.submittedDataObj.testInputsObj.step5, step5Obj);
   }
 
@@ -662,35 +658,102 @@ export class CareerTestComponent {
         this.diplomaCourses
       ),
     };
+
+    const finalStep6Arr: any[] = [];
+    const fullStep6Arr = this.globalCertificates.concat(this.diplomaCourses);
+    const fullSubmittedStep6Arr: any[] = globalCerts.concat(diplomaCourses);
+
+    fullStep6Arr.map((element) => {
+      if (fullSubmittedStep6Arr.includes(element.value)) {
+        finalStep6Arr.push(element.value);
+      } else {
+        finalStep6Arr.push(0);
+      }
+    });
+
+    this.createFuzzyInputData(finalStep6Arr, 7);
     Object.assign(this.submittedDataObj.testInputsObj.step6, step6Obj);
   }
-  submit(): void {
+
+  step7Next(): void {
     const step7Obj = {
       careerPathRanking: this.careerPrefList,
     };
     Object.assign(this.submittedDataObj.testInputsObj.step7, step7Obj);
+    this.submit();
+  }
 
-    const finalDataObj = {
-      userId: this.token.nameid,
-      testedOn: new Date().toISOString(),
-      testInputsObj: JSON.stringify(this.submittedDataObj.testInputsObj),
-    };
+  submit(): void {
+    this.openWaitingDialog();
+    this.isSubmitted = true;
+    // const finalDataObj = {
+    //   userId: this.token.nameid,
+    //   testedOn: new Date().toISOString(),
+    //   testInputsObj: JSON.stringify(this.submittedDataObj.testInputsObj),
+    // };
 
-    this.careerTestService.submitTestData(finalDataObj).subscribe({
-      next: (res) => {
-        alert(res.message);
-        this.stepOneFormGroup.reset();
-        this.stepTwoFormGroup.reset();
-        this.stepThreeFormGroup.reset();
-        this.stepFourFormGroup.reset();
-        this.stepFiveFormGroup.reset();
-        this.stepSixFormGroup.reset();
-        console.log(finalDataObj);
-      },
-      error: (err) => {
-        alert(err.error.message);
-      },
-    });
+    // const detailedFuzzyObj = [];
+    // const preferences = ['SE', 'QA', 'PM', 'UX', 'INFRA'];
+    // const preferenceScores = [100, 80, 60, 40, 20];
+
+    // if (this.fuzzyObjArr.length > 0) {
+    //   for (let index = 0; index < 5; index++) {
+    //     const pref = preferences[index] || '';
+    //     const prefScoreIndex = this.careerPrefList.findIndex((item: any) => item.prefVal === pref);
+  
+    //     detailedFuzzyObj.push({
+    //       mark: (this.fuzzyObjArr[0].value?.[pref] / 5) || null,
+    //       project: this.fuzzyObjArr[1].value?.[pref] || null,
+    //       internship: this.fuzzyObjArr[2].value?.[pref] || null,
+    //       technical_skills: this.fuzzyObjArr[3].value?.[pref] || null,
+    //       soft_skills: this.fuzzyObjArr[4].value?.[pref] || null,
+    //       preference: (preferenceScores[prefScoreIndex] / 5),
+    //       professional_achievements: this.fuzzyObjArr[5].value?.[pref] || null,
+    //       extra_curricular_achievements: this.fuzzyObjArr[6].value?.[pref] || null,
+    //     });
+    //   }
+    //   console.log(detailedFuzzyObj);
+
+    //   detailedFuzzyObj.forEach((cp, index) => {
+    //     const fuzzyObj = {
+    //       "input1": ((cp.mark + cp.project + cp.internship) / 120) * 100,
+    //       "input2": ((cp.technical_skills + cp.soft_skills) / 50) * 100,
+    //       "input3": (cp.preference / 25) * 100,
+    //       "input4": ((cp.professional_achievements + cp.extra_curricular_achievements) / 32) * 100
+    //     }
+
+    //     this.careerTestService.processFuzzy(fuzzyObj).subscribe({
+    //       next: (result) => {
+    //         this.isSubmitted = false;
+    //         console.log(result);
+    //         if (result.output && (index === detailedFuzzyObj.length-1)) {
+    //           this.careerTestService.submitTestData(finalDataObj).subscribe({
+    //             next: (res) => {
+    //               alert(res.message);
+    //               this.stepOneFormGroup.reset();
+    //               this.stepTwoFormGroup.reset();
+    //               this.stepThreeFormGroup.reset();
+    //               this.stepFourFormGroup.reset();
+    //               this.stepFiveFormGroup.reset();
+    //               this.stepSixFormGroup.reset();
+    //             },
+    //             error: (err) => {
+    //               alert(err.error.message);
+    //             },
+    //           });
+    //         } else {
+    //           alert("Could not fetch the response!");
+    //         }
+    //       },
+    //       error: (err) => {
+    //         alert(err.error.message);
+    //         this.isSubmitted = false;
+    //       }
+    //     })
+    //   });
+    // } else {
+    //   alert("Some data is missing!");
+    // }
   }
 }
 
