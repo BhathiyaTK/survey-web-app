@@ -31,7 +31,7 @@ export class ProfileComponent implements OnInit {
   }
 
   getUserData(userId: number): void {
-    this.userService.getUserById(2).subscribe({
+    this.userService.getUserById(userId).subscribe({
       next: (response) => {
         this.user = response;
       },
