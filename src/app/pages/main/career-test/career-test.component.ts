@@ -721,7 +721,6 @@ export class CareerTestComponent {
           extra_curricular_achievements: this.fuzzyObjArr[6].value?.[pref] || null,
         });
       }
-      console.log(detailedFuzzyObj);
 
       detailedFuzzyObj.forEach((cp, index) => {
         const fuzzyObj = {
@@ -734,12 +733,17 @@ export class CareerTestComponent {
         this.careerTestService.processFuzzy(fuzzyObj).subscribe({
           next: (result) => {
             this.isSubmitted = false;
-            console.log(result);
-            if (result.output && (index === detailedFuzzyObj.length-1)) {
+
+            if(result.output) {
+              this.fuzzyOutputObj.push(result.output);
+            } else {
+              alert("Could not fetch the response!");
+            }
+
+            if (index === detailedFuzzyObj.length-1) {
               this.careerTestService.submitTestData(finalDataObj).subscribe({
                 next: (res) => {
                   alert(res.message);
-                  this.fuzzyOutputObj.push(res.output);
                   this.stepOneFormGroup.reset();
                   this.stepTwoFormGroup.reset();
                   this.stepThreeFormGroup.reset();
@@ -751,8 +755,6 @@ export class CareerTestComponent {
                   alert(err.error.message);
                 },
               });
-            } else {
-              alert("Could not fetch the response!");
             }
             this.closeWaitingDialog();
           },
@@ -763,6 +765,7 @@ export class CareerTestComponent {
           }
         })
       });
+      console.log(this.fuzzyOutputObj);
     } else {
       alert("Some data is missing!");
       this.closeWaitingDialog();
