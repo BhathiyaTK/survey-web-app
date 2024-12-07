@@ -26,7 +26,7 @@ export class CareerTestComponent {
   stepSixFormGroup!: FormGroup;
 
   fuzzyObjArr: any[] = [];
-  fuzzyObj: any = {};
+  fuzzyOutputObj: any[] = [];
 
   academicGradesList: any[] = [100, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 29];
 
@@ -538,7 +538,15 @@ export class CareerTestComponent {
   }
 
   openWaitingDialog(): void {
-    this.dialog.open(WaitingDialogComponent);
+    this.dialog.open(WaitingDialogComponent, { disableClose: true });
+  }
+
+  closeWaitingDialog(): void {
+    const dialogs = this.dialog.openDialogs;
+    if (dialogs.length > 0) {
+      const targetDialog = dialogs.find(dialog => dialog.componentInstance instanceof WaitingDialogComponent);
+      targetDialog?.close();
+    }
   }
 
   createFuzzyInputData(formDataArr: any[], indexNo: number): void {
@@ -686,74 +694,79 @@ export class CareerTestComponent {
   submit(): void {
     this.openWaitingDialog();
     this.isSubmitted = true;
-    // const finalDataObj = {
-    //   userId: this.token.nameid,
-    //   testedOn: new Date().toISOString(),
-    //   testInputsObj: JSON.stringify(this.submittedDataObj.testInputsObj),
-    // };
 
-    // const detailedFuzzyObj = [];
-    // const preferences = ['SE', 'QA', 'PM', 'UX', 'INFRA'];
-    // const preferenceScores = [100, 80, 60, 40, 20];
+    const finalDataObj = {
+      userId: this.token.nameid,
+      testedOn: new Date().toISOString(),
+      testInputsObj: JSON.stringify(this.submittedDataObj.testInputsObj),
+    };
 
-    // if (this.fuzzyObjArr.length > 0) {
-    //   for (let index = 0; index < 5; index++) {
-    //     const pref = preferences[index] || '';
-    //     const prefScoreIndex = this.careerPrefList.findIndex((item: any) => item.prefVal === pref);
+    const detailedFuzzyObj = [];
+    const preferences = ['SE', 'QA', 'PM', 'UX', 'INFRA'];
+    const preferenceScores = [100, 80, 60, 40, 20];
+
+    if (this.fuzzyObjArr.length > 0) {
+      for (let index = 0; index < 5; index++) {
+        const pref = preferences[index] || '';
+        const prefScoreIndex = this.careerPrefList.findIndex((item: any) => item.prefVal === pref);
   
-    //     detailedFuzzyObj.push({
-    //       mark: (this.fuzzyObjArr[0].value?.[pref] / 5) || null,
-    //       project: this.fuzzyObjArr[1].value?.[pref] || null,
-    //       internship: this.fuzzyObjArr[2].value?.[pref] || null,
-    //       technical_skills: this.fuzzyObjArr[3].value?.[pref] || null,
-    //       soft_skills: this.fuzzyObjArr[4].value?.[pref] || null,
-    //       preference: (preferenceScores[prefScoreIndex] / 5),
-    //       professional_achievements: this.fuzzyObjArr[5].value?.[pref] || null,
-    //       extra_curricular_achievements: this.fuzzyObjArr[6].value?.[pref] || null,
-    //     });
-    //   }
-    //   console.log(detailedFuzzyObj);
+        detailedFuzzyObj.push({
+          mark: (this.fuzzyObjArr[0].value?.[pref] / 5) || null,
+          project: this.fuzzyObjArr[1].value?.[pref] || null,
+          internship: this.fuzzyObjArr[2].value?.[pref] || null,
+          technical_skills: this.fuzzyObjArr[3].value?.[pref] || null,
+          soft_skills: this.fuzzyObjArr[4].value?.[pref] || null,
+          preference: (preferenceScores[prefScoreIndex] / 5),
+          professional_achievements: this.fuzzyObjArr[5].value?.[pref] || null,
+          extra_curricular_achievements: this.fuzzyObjArr[6].value?.[pref] || null,
+        });
+      }
+      console.log(detailedFuzzyObj);
 
-    //   detailedFuzzyObj.forEach((cp, index) => {
-    //     const fuzzyObj = {
-    //       "input1": ((cp.mark + cp.project + cp.internship) / 120) * 100,
-    //       "input2": ((cp.technical_skills + cp.soft_skills) / 50) * 100,
-    //       "input3": (cp.preference / 25) * 100,
-    //       "input4": ((cp.professional_achievements + cp.extra_curricular_achievements) / 32) * 100
-    //     }
+      detailedFuzzyObj.forEach((cp, index) => {
+        const fuzzyObj = {
+          "input1": ((cp.mark + cp.project + cp.internship) / 120) * 100,
+          "input2": ((cp.technical_skills + cp.soft_skills) / 50) * 100,
+          "input3": (cp.preference / 25) * 100,
+          "input4": ((cp.professional_achievements + cp.extra_curricular_achievements) / 32) * 100
+        }
 
-    //     this.careerTestService.processFuzzy(fuzzyObj).subscribe({
-    //       next: (result) => {
-    //         this.isSubmitted = false;
-    //         console.log(result);
-    //         if (result.output && (index === detailedFuzzyObj.length-1)) {
-    //           this.careerTestService.submitTestData(finalDataObj).subscribe({
-    //             next: (res) => {
-    //               alert(res.message);
-    //               this.stepOneFormGroup.reset();
-    //               this.stepTwoFormGroup.reset();
-    //               this.stepThreeFormGroup.reset();
-    //               this.stepFourFormGroup.reset();
-    //               this.stepFiveFormGroup.reset();
-    //               this.stepSixFormGroup.reset();
-    //             },
-    //             error: (err) => {
-    //               alert(err.error.message);
-    //             },
-    //           });
-    //         } else {
-    //           alert("Could not fetch the response!");
-    //         }
-    //       },
-    //       error: (err) => {
-    //         alert(err.error.message);
-    //         this.isSubmitted = false;
-    //       }
-    //     })
-    //   });
-    // } else {
-    //   alert("Some data is missing!");
-    // }
+        this.careerTestService.processFuzzy(fuzzyObj).subscribe({
+          next: (result) => {
+            this.isSubmitted = false;
+            console.log(result);
+            if (result.output && (index === detailedFuzzyObj.length-1)) {
+              this.careerTestService.submitTestData(finalDataObj).subscribe({
+                next: (res) => {
+                  alert(res.message);
+                  this.fuzzyOutputObj.push(res.output);
+                  this.stepOneFormGroup.reset();
+                  this.stepTwoFormGroup.reset();
+                  this.stepThreeFormGroup.reset();
+                  this.stepFourFormGroup.reset();
+                  this.stepFiveFormGroup.reset();
+                  this.stepSixFormGroup.reset();
+                },
+                error: (err) => {
+                  alert(err.error.message);
+                },
+              });
+            } else {
+              alert("Could not fetch the response!");
+            }
+            this.closeWaitingDialog();
+          },
+          error: (err) => {
+            alert(err.error.message);
+            this.isSubmitted = false;
+            this.closeWaitingDialog();
+          }
+        })
+      });
+    } else {
+      alert("Some data is missing!");
+      this.closeWaitingDialog();
+    }
   }
 }
 
