@@ -4,13 +4,14 @@ import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { jwtDecode } from 'jwt-decode';
 import { Observable } from 'rxjs';
 import { CustomToken } from '../interface/custom-token';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private baseUrl: string = "http://localhost:5198/api/user";
+  private baseUrl: string = environment.apiUrl + "/api/user";
   passwordReqs: any = {
     has6characters: false,
     hasUppercase: false,
