@@ -10,9 +10,12 @@
         </div>
     </div>
 
-    <mat-menu #menu="matMenu" xPosition="before" class="w-44">
+    <mat-menu #menu="matMenu" xPosition="before" class="w-72">
         <a routerLink="profile" mat-menu-item>
             <mat-icon aria-hidden="false" aria-label="View profile" fontIcon="person"></mat-icon>Profile
+            <div class="text-xs font-thin text-gray-400">
+                Personal information, Skill tracker
+            </div>
         </a>
         <mat-divider></mat-divider>
         <button mat-menu-item (click)="logout()">

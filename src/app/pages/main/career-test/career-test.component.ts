@@ -537,6 +537,16 @@ export class CareerTestComponent {
     });
   }
 
+  openResponseDialog(response: any, type: number): void {
+    this.dialog.open(DialogComponent, {
+      data: {
+        isResponse: true,
+        responseMsg: response,
+        responseType: type
+      },
+    });
+  }
+
   openWaitingDialog(): void {
     this.dialog.open(WaitingDialogComponent, { disableClose: true });
   }
@@ -695,10 +705,11 @@ export class CareerTestComponent {
     this.openWaitingDialog();
     this.isSubmitted = true;
 
-    const finalDataObj = {
+    const finalDataObj: any = {
       userId: this.token.nameid,
       testedOn: new Date().toISOString(),
       testInputsObj: JSON.stringify(this.submittedDataObj.testInputsObj),
+      testResult: ""
     };
 
     const detailedFuzzyObj = [];
@@ -735,15 +746,34 @@ export class CareerTestComponent {
             this.isSubmitted = false;
 
             if(result.output) {
-              this.fuzzyOutputObj.push(result.output);
+              switch (index) {
+                case 0:
+                  this.fuzzyOutputObj.push({ "SE": result.output });
+                  break;
+                case 1:
+                  this.fuzzyOutputObj.push({ "QA": result.output });
+                  break;
+                case 2:
+                  this.fuzzyOutputObj.push({ "PM": result.output });
+                  break;
+                case 3:
+                  this.fuzzyOutputObj.push({ "UX": result.output });
+                  break;
+                case 4:
+                  this.fuzzyOutputObj.push({ "INFRA": result.output });
+                  break;
+                default:
+                  break;
+              }
             } else {
-              alert("Could not fetch the response!");
+              this.openResponseDialog("Could not fetch the response!", 1);
             }
 
             if (index === detailedFuzzyObj.length-1) {
+              finalDataObj.testResult = JSON.stringify(this.fuzzyOutputObj);  // Assign fuzzy out results
               this.careerTestService.submitTestData(finalDataObj).subscribe({
                 next: (res) => {
-                  alert(res.message);
+                  this.openResponseDialog(res.message, 0);
                   this.stepOneFormGroup.reset();
                   this.stepTwoFormGroup.reset();
                   this.stepThreeFormGroup.reset();
@@ -752,22 +782,21 @@ export class CareerTestComponent {
                   this.stepSixFormGroup.reset();
                 },
                 error: (err) => {
-                  alert(err.error.message);
+                  this.openResponseDialog(err.title, 2);
                 },
               });
             }
             this.closeWaitingDialog();
           },
           error: (err) => {
-            alert(err.error.message);
+            this.openResponseDialog(err.error.message, 1);
             this.isSubmitted = false;
             this.closeWaitingDialog();
           }
         })
       });
-      console.log(this.fuzzyOutputObj);
     } else {
-      alert("Some data is missing!");
+      this.openResponseDialog("Some data is missing!", 1);
       this.closeWaitingDialog();
     }
   }

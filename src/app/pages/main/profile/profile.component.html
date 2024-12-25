@@ -21,21 +21,28 @@
                     <mat-radio-group
                     aria-labelledby="vertical-radio-group-label"
                     class="vertical-radio-group">
-                        <mat-radio-button class="vertical-radio-button mb-3 last:mb-0 text-sm" *ngFor="let progress of progressList" [value]="progress">
-                            <span>{{progress.date}}</span><br>
-                            <span class="text-gray-400">{{progress.time}}</span>
+                        <mat-radio-button class="vertical-radio-button mb-3 last:mb-0 text-sm" *ngFor="let progress of progressList" [value]="progress" (click)="selectedResultSet(progress)">
+                            <span>{{progress.testedOn | date}}</span><br>
+                            <span class="text-gray-400">{{progress.testedOn | date:'hh:mm a'}}</span>
                         </mat-radio-button>
                     </mat-radio-group>
                 </div>
                 <div class="col-span-4">
-                    <h2 class="text-2xl font-bold mb-4">Skills</h2>
-                    <div class="grid grid-cols-2 gap-14">
+                    <h2 class="text-2xl font-bold mb-4">Results</h2>
+                    <div *ngIf="selectedResult ?? progressList[0]" class="grid grid-cols-2 gap-14">
                         <div>
-                            <div class="flex justify-between align-center mb-2">
-                                <span>Hands-on skills with tech stacks</span>
-                                <span>70%</span>
-                            </div>
-                            <mat-progress-bar mode="determinate" value="70"></mat-progress-bar>
+                            <ng-container *ngFor="let item of selectedResult.testResult">
+                                <div *ngFor="let entry of item | keyvalue" class="mb-7 last:mb-0">
+                                    <div class="flex justify-between align-center mb-2">
+                                        <span>{{entry.key}}</span>
+                                        <div class="text-right">
+                                            <div>{{(entry.value / selectedResult.scoreSum) * 100 | number:'1.2-2'}}%</div>
+                                            <div class="text-xs text-gray-400">{{(entry.value / selectedResult.scoreSum) * 100}}%</div>
+                                        </div>
+                                    </div>
+                                    <mat-progress-bar mode="determinate" [value]="(entry.value / selectedResult.scoreSum) * 100"></mat-progress-bar>
+                                </div>
+                            </ng-container>
                         </div>
                     </div>
                 </div>

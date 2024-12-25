@@ -1,33 +1,67 @@
-import { Location } from '@angular/common';
+import { KeyValue, KeyValuePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/common/dialog/dialog.component';
 import { AuthService } from 'src/app/services/auth.service';
+import { CareerTestService } from 'src/app/services/career-test.service';
 import { UsersService } from 'src/app/services/users.service';
+
+interface TestResultItem {
+  [key: string]: number; // Allows any key with a numeric value
+}
+
+interface SelectedResult {
+  id: number;
+  refNo: number;
+  userId: string;
+  testInputsObj: Object;
+  testedOn: string;
+  testResult: TestResultItem[];
+  scoreSum: number;
+}
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
+
 export class ProfileComponent implements OnInit {
 
   user: any;
-  progressList: any[] = [
-    {date: '2024-06-08', time: '10:24 AM'},
-    {date: '2024-06-08', time: '01:15 PM'},
-    {date: '2024-07-02', time: '09:05 AM'},
-    {date: '2024-07-10', time: '08:47 AM'},
-    {date: '2024-07-22', time: '05:32 PM'},
-  ];
+  progressList: any[] = [];
+  selectedResult: SelectedResult = {
+    id: 0,
+    refNo: 0,
+    userId: '',
+    testInputsObj: {},
+    testedOn: '',
+    testResult: [],
+    scoreSum: 0
+  };
 
-  constructor(private userService: UsersService, private authService: AuthService, private location: Location) {}
+  constructor(
+    private userService: UsersService,
+    private authService: AuthService,
+    private careerService: CareerTestService,
+    private location: Location,
+    public dialog: MatDialog) {}
 
   ngOnInit(): void {
     const token = this.authService.decodeToken();
     if (token) {
       this.getUserData(parseInt(token.nameid));
     } else {
-      alert('Token not found');
+      this.dialog.open(DialogComponent, {
+        data: {
+          isResponse: true,
+          responseMsg: "Token not found!",
+          responseType: 1
+        }
+      });
     }
+
+    this.getAllTestData();
   }
 
   getUserData(userId: number): void {
@@ -39,6 +73,28 @@ export class ProfileComponent implements OnInit {
         console.log(error);
       }
     })
+  }
+
+  getAllTestData(): void {
+    this.careerService.getAllTests().subscribe({
+      next: (response) => {
+        this.progressList = response;
+        // this.selectedResultSet(this.progressList[0]);
+        console.log(this.progressList.reverse());
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
+  }
+
+  selectedResultSet(result: any): void {
+    result.testInputsObj = JSON.parse(result.testInputsObj);
+    result.testResult = JSON.parse(result.testResult);
+    let scoreSum = result.testResult.reduce((sum: any, item: any) => sum + Object.values(item)[0], 0) as number;
+    result['scoreSum'] = scoreSum;
+    this.selectedResult = result;
+    console.log(this.selectedResult);
   }
 
   goBack(): void {

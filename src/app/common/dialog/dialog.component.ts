@@ -13,6 +13,9 @@ export class DialogComponent {
   isConfirm: boolean = false;
   isRedirecting: boolean = false;
   color: ThemePalette = 'accent';
+  isResponse: boolean = false;
+  responseMsg: string = "";
+  responseType: number = 0;
 
   constructor(
     public dialogRef: MatDialogRef<DialogComponent>,

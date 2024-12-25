@@ -1,13 +1,19 @@
 <h1 mat-dialog-title *ngIf="!isRedirecting" class="font-semibold text-lg">
-  <strong>{{isConfirm ? 'Ending the test...' : ('Hi '+data.name)}}</strong>
+  <strong *ngIf="!isResponse">{{isConfirm ? 'Ending the test...' : ('Hi '+data.name)}}</strong>
+  <strong *ngIf="isResponse && responseType === 0 " class="uppercase text-green-500">success!</strong>
+  <strong *ngIf="isResponse && responseType === 1 " class="uppercase text-red-500">error!</strong>
+  <strong *ngIf="isResponse && responseType === 2 " class="uppercase text-red-500">failed!</strong>
 </h1>
 <mat-divider></mat-divider>
 <div mat-dialog-content>
-  <ng-container *ngIf="isConfirm || isRedirecting; then countdown else ask"></ng-container>
+  <ng-container *ngIf="isConfirm || isRedirecting; then countdown else extendedCondition"></ng-container>
+  <ng-template #extendedCondition>
+    <ng-container *ngIf="isResponse; then response else ask"></ng-container>
+  </ng-template>
 </div>
 <div mat-dialog-actions align="end" *ngIf="!isConfirm && !isRedirecting" class="text-center">
-  <button mat-stroked-button (click)="onClose()">No</button>
-  <button mat-flat-button (click)="confirmLeave()" color="warn">Yes</button>
+  <button mat-stroked-button (click)="onClose()">{{isResponse ? 'Close' : 'No'}}</button>
+  <button mat-flat-button (click)="confirmLeave()" color="warn" *ngIf="!isResponse">Yes</button>
 </div>
 
 
@@ -28,5 +34,13 @@
     </div>
     <p *ngIf="!isRedirecting">Please wait. You 're almost there...</p>
     <p *ngIf="isRedirecting" class="p-5">Redirecting...</p>
+  </div>
+</ng-template>
+
+<ng-template #response>
+  <div class="text-center">
+    <p>
+      {{responseMsg}}
+    </p>
   </div>
 </ng-template>

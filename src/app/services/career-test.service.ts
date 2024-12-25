@@ -19,4 +19,8 @@ export class CareerTestService {
   processFuzzy(fuzzyData: any): Observable<any> {
     return this.http.post('https://icdss-v2.onrender.com/icdss', fuzzyData);
   }
+
+  getAllTests(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/getAllTests`);
+  }
 }
