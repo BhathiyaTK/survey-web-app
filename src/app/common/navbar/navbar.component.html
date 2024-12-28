@@ -4,8 +4,8 @@
             <img src="assets/images/logos/TechXplore-Logo.png" width="250px" alt="logo">
         </div>
         <div class="flex flex-row items-center space-x-4 cursor-pointer hover:bg-slate-100 ps-3 pe-2 py-2 rounded-md" [matMenuTriggerFor]="menu">
-            <img class="rounded-full" src="assets/images/sample-profile.jpg" width="50" height="50" alt="Profile image">
-            <span class="font-medium">{{user.firstName + '&nbsp;' + user.lastName}}</span>
+            <img class="rounded-full" src="assets/images/sample-profile.png" width="50" height="50" alt="Profile image">
+            <span class="font-medium">{{(user.firstName ?? '') + '&nbsp;' + (user.lastName ?? '')}}</span>
             <mat-icon aria-hidden="false" fontIcon="arrow_drop_down"></mat-icon>
         </div>
     </div>

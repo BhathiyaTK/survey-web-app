@@ -104,6 +104,14 @@ a {
     @apply hover:bg-green-700;
 }
 
+.primary-outline-btn {
+    @apply border;
+    @apply border-blue-500;
+    @apply text-blue-600;
+    @apply hover:bg-blue-600;
+    @apply hover:text-white;
+}
+
 .danger-outline-btn {
     @apply border;
     @apply border-red-200;

@@ -39,6 +39,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ProfileComponent } from './pages/main/profile/profile.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { WaitingDialogComponent } from './pages/main/waiting-dialog/waiting-dialog.component';
+import { JsonFormatterPipe } from './pipes/json-formatter.pipe';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { WaitingDialogComponent } from './pages/main/waiting-dialog/waiting-dial
     PublicFooterComponent,
     ProfileComponent,
     WaitingDialogComponent,
+    JsonFormatterPipe,
   ],
   imports: [
     BrowserModule,

@@ -9,56 +9,106 @@
                     </p>
                 </div>
                 <div>
-                    <a (click)="goBack();" class="btn primary-btn px-4 py-2 flex items-center cursor-pointer">
-                        <mat-icon aria-hidden="false" aria-label="Go back to home page" fontIcon="keyboard_backspace" class="me-2"></mat-icon>Go back
+                    <a (click)="goBack();" class="btn primary-btn px-4 py-1.5 flex items-center cursor-pointer text-sm">
+                        <mat-icon aria-hidden="false" aria-label="Go back to home page" fontIcon="keyboard_backspace" class="me-2 text-md"></mat-icon>Back
                     </a>
                 </div>
             </div>
             <hr class="my-4">
             <div class="grid grid-cols-5 gap-4">
                 <div class="border-r">
-                    <label id="vertical-radio-group-label">Records saved on</label>
+                    <label id="vertical-radio-group-label">Career tests saved on</label>
                     <mat-radio-group
                     aria-labelledby="vertical-radio-group-label"
                     class="vertical-radio-group">
-                        <mat-radio-button class="vertical-radio-button mb-3 last:mb-0 text-sm" *ngFor="let progress of progressList" [value]="progress" (click)="selectedResultSet(progress)">
+                        <mat-radio-button class="vertical-radio-button mb-3 last:mb-0 text-sm" *ngFor="let progress of progressList; let i = index" [value]="progress" [checked]="i === 0" (click)="selectedResultSet(progress)">
                             <span>{{progress.testedOn | date}}</span><br>
                             <span class="text-gray-400">{{progress.testedOn | date:'hh:mm a'}}</span>
                         </mat-radio-button>
                     </mat-radio-group>
                 </div>
                 <div class="col-span-4">
-                    <h2 class="text-2xl font-bold mb-4">Results</h2>
-                    <div *ngIf="selectedResult ?? progressList[0]" class="grid grid-cols-2 gap-14">
-                        <div>
-                            <ng-container *ngFor="let item of selectedResult.testResult">
-                                <div *ngFor="let entry of item | keyvalue" class="mb-7 last:mb-0">
-                                    <div class="flex justify-between align-center mb-2">
-                                        <span>{{entry.key}}</span>
-                                        <div class="text-right">
-                                            <div>{{(entry.value / selectedResult.scoreSum) * 100 | number:'1.2-2'}}%</div>
-                                            <div class="text-xs text-gray-400">{{(entry.value / selectedResult.scoreSum) * 100}}%</div>
+                    <div id="results">
+                        <h2 class="text-xl font-bold mb-6">Results</h2>
+                        <div *ngIf="selectedResult ?? progressList[0]" class="grid grid-cols-2 gap-8">
+                            <div>
+                                <div *ngIf="selectedResult.testResult">
+                                    <ng-container *ngFor="let item of selectedResult.testResult">
+                                        <div *ngFor="let entry of item | keyvalue" class="mb-7 last:mb-0">
+                                            <div class="flex justify-between align-center mb-2">
+                                                <div>
+                                                    <span *ngIf="entry.key === 'SE'">Software Engineering</span>
+                                                    <span *ngIf="entry.key === 'QA'">Quality Assurance</span>
+                                                    <span *ngIf="entry.key === 'UX'">UI/UX</span>
+                                                    <span *ngIf="entry.key === 'INFRA'">Others</span>
+                                                    <div class="text-xs text-gray-500">Score: {{entry.value}}</div>
+                                                </div>
+                                                <div class="text-right">
+                                                    <div>~{{(entry.value / selectedResult.scoreSum) * 100 | number:'1.2-2'}}%</div>
+                                                    <div class="text-xs text-gray-500">{{(entry.value / selectedResult.scoreSum) * 100}}%</div>
+                                                </div>
+                                            </div>
+                                            <mat-progress-bar mode="determinate" [value]="(entry.value / selectedResult.scoreSum) * 100"></mat-progress-bar>
                                         </div>
-                                    </div>
-                                    <mat-progress-bar mode="determinate" [value]="(entry.value / selectedResult.scoreSum) * 100"></mat-progress-bar>
+                                    </ng-container>
                                 </div>
-                            </ng-container>
+                                <div *ngIf="!selectedResult.testResult">
+                                    <div class="px-5 py-20 border rounded-lg text-center italic text-sm text-gray-400">
+                                        <img src="./assets/images/icons/empty-folder.png" alt="Empty results" class="opacity-40 mx-auto mb-2">
+                                        No results available for this test.
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="px-4 py-5 border rounded-lg text-center bg-white">
+                                    <div class="font-light">Recommended Career Path</div>
+                                    <hr class="my-3">
+                                    <img src="./assets/images/icons/medal.png" alt="Recommended Career Path Icon" class="mx-auto my-4 w-24">
+                                    <div class="font-semibold text-lg text-green-500 mb-4">
+                                        <span *ngIf="maxPath === 'SE'">Software Engineering</span>
+                                        <span *ngIf="maxPath === 'QA'">Quality Assurance</span>
+                                        <span *ngIf="maxPath === 'UX'">UI/UX</span>
+                                        <span *ngIf="maxPath === 'INFRA'">Others</span>
+                                    </div>
+                                    <div class="text-gray-400">
+                                        <small>This career path with the score of {{maxScore}} is highly recommended for you based on your test results.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div id="inputs">
+                        <h2 class="text-xl font-bold mt-6">Test Inputs</h2>
+                        <div class="mb-6">
+                            <p class="text-sm text-gray-500 mb-0">You can view your test inputs in JSON format or download it for any personal usage.</p>
+                        </div>
+                        <div class="flex flex-row space-x-5">
+                            <button type="button" (click)="isViewInputData = !isViewInputData" class="btn secondary-btn px-4 py-1.5 flex items-center cursor-pointer text-sm">
+                                <mat-icon aria-hidden="false" aria-label="View test inputs" [fontIcon]="isViewInputData ? 'visibility_off' : 'visibility'" class="me-2 text-md"></mat-icon>{{isViewInputData ? 'Hide':'View'}} Input Data
+                            </button>
+                            <button type="button" (click)="downloadInputJson(selectedResult.testInputsObj, selectedResult.testedOn)" class="btn secondary-btn px-4 py-1.5 flex items-center cursor-pointer text-sm">
+                                <mat-icon aria-hidden="false" aria-label="Download test inputs as JSON" fontIcon="download" class="me-2 text-md"></mat-icon>Download as JSON
+                            </button>
+                        </div>
+                        <div *ngIf="isViewInputData" class="bg-white border rounded-lg p-3 mt-4 font-mono text-xs max-h-[700px] overflow-y-auto">
+                            <pre [innerHTML]="selectedResult.testInputsObj | jsonFormatter"></pre>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="w-[25%] h-fit rounded-xl bg-gray-50 border p-5">
+        <div *ngIf="user" class="w-[25%] h-fit rounded-xl bg-gray-50 border p-5">
             <div class="mb-4">
-                <img src="assets/images/sample-profile.jpg" alt="User Profile" width="130" height="130" class="rounded-full mx-auto">
+                <img src="assets/images/sample-profile.png" alt="User Profile" width="130" height="130" class="rounded-full mx-auto">
             </div>
             <div class="text-center mb-4">
-                <h1 class="font-semibold text-lg">{{user.firstName + '&nbsp;' + user.lastName}}</h1>
-                <p class="text-sm">{{user.email}}</p>
+                <h1 class="font-semibold text-lg">{{(user.firstName ?? '') + '&nbsp;' + (user.lastName ?? '')}}</h1>
+                <p class="text-sm text-gray-500">{{(user.email ?? '')}}</p>
             </div>
             <div class="text-center mb-4">
                 <mat-chip color="accent" class="bg-green-400">
-                    <span class="capitalize text-sm">{{user.role}}</span>
+                    <span class="uppercase text-sm">{{(user.role ?? '')}}</span>
                 </mat-chip>
             </div>
             <mat-divider></mat-divider>
